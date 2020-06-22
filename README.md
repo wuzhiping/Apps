@@ -1,0 +1,9 @@
+# BPM (app)
+
+sudo npm install -g @quasar/cli
+
+## quasar create App
+## cd App
+## quasar dev -m pwa
+## qusar build -m pwa
+
