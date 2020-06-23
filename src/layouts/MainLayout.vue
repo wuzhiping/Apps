@@ -22,7 +22,7 @@
     <q-drawer
       v-model="leftDrawerOpen"
       overlay
-      :width="260"
+      :width="290"
       :breakpoint="700"
       behavior="desktop" 
       bordered

@@ -6,10 +6,11 @@
   "author": "feit",
   "private": true,
   "scripts": {
-    "dev" : "quasar dev -m pwa",
-    "build" : "quasar build -m pwa"
+    "dev": "quasar dev -m pwa",
+    "build": "quasar build -m pwa"
   },
   "dependencies": {
+    "@daykeep/calendar-quasar": "^1.0.0-beta.3",
     "@quasar/extras": "^1.0.0",
     "@vue/composition-api": "^0.6.4",
     "axios": "^0.18.1",

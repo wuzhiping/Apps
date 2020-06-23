@@ -1,39 +1,30 @@
 <template>
-  <q-page class="row xitems-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-      style="border:1px solid red;width:100%;"
-    ></example-component>
+  <q-page class="row items-center justify-evenly" style="min-height:auto;height:100%;">
+    <daykeep-calendar-month style="width:100%;height:calc(100% - 0px);"
+       :sunday-first-day-of-week="true"
+       calendar-locale="en-us"
+    />
   </q-page>
 </template>
 
-<script lang="ts">
+<script lang="javascript">
 import Vue from 'vue';
 
-import ExampleComponent from 'components/CompositionComponent.vue';
-import { Todo, Meta } from 'components/models';
+import { DaykeepCalendarMonth } from '@daykeep/calendar-quasar'
 
 export default Vue.extend({
   name: 'PageIndex',
-  components: { ExampleComponent },
+  components: { DaykeepCalendarMonth  },
   data() {
-    const todos: Todo[] = [
-      {
-        id: 1,
-        content: 'ct1'
-      },
-      {
-        id: 2,
-        content: 'ct2'
-      }
-    ];
-    const meta: Meta = {
-      totalCount: 1200
-    };
-    return { todos, meta };
+    return { };
   }
 });
 </script>
+
+<style lang="sass">
+.calendar-tab-panels .q-tab-panel
+   padding: 1px
+.calendar-tabs
+   zoom: 100%
+</style>
+
