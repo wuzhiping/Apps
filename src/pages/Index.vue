@@ -1,10 +1,11 @@
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page class="row xitems-center justify-evenly">
     <example-component
       title="Example component"
       active
       :todos="todos"
       :meta="meta"
+      style="border:1px solid red;width:100%;"
     ></example-component>
   </q-page>
 </template>

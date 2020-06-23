@@ -22,5 +22,11 @@ export default route<StoreInterface>(function ({ Vue }) {
     base: process.env.VUE_ROUTER_BASE
   });
 
+  Router.beforeEach((to, from, next) => {
+      console.dir(from.path + " -> " + to.path)
+      next();
+  });
+
+
   return Router;
 })

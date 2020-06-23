@@ -113,7 +113,7 @@ module.exports = configure(function (/* ctx */) {
         description: `agileFlow`,
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#ffffff',
+        background_color: '#f3f3fe',
         theme_color: '#027be3',
         icons: [
           {
