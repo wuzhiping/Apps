@@ -6,7 +6,8 @@
   "author": "feit",
   "private": true,
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "dev" : "quasar dev -m pwa",
+    "build" : "quasar build -m pwa"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
