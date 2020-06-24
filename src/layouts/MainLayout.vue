@@ -113,7 +113,14 @@ export default {
           icon: 'outbox',
           separator: true,
           link: '/history'
-        }
+        },
+        {
+          title: 'eGate',
+          caption: 'eGate',
+          icon: 'help',
+          separator: true,
+          link: '/form/egate'
+        },
 
       ]
     }

@@ -12,8 +12,8 @@ export default boot(({ Vue }) => {
 
   axios.defaults.baseURL = 'https://a.feg.com.tw';
 
-  axios.defaults.withCredentials=true;
-  axios.defaults.headers.common["TZ"] = -(new Date()).getTimezoneOffset()/60;
+  axios.defaults.withCredentials=false;
+  //axios.defaults.headers.common["TZ"] = -(new Date()).getTimezoneOffset()/60;
 
   // axios.defaults.retry = 2;
   // axios.defaults.retryDelay = 2000;
