@@ -9,5 +9,7 @@ Vue.use(formCreate)
 Vue.use(VueQrcodeReader)
 Vue.use(iView)
 
+import Mock from 'mockjs'
+
 export default ({ app }) => { }
 
