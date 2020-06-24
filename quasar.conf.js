@@ -23,6 +23,7 @@ module.exports = configure(function (/* ctx */) {
       'composition-api',
       'i18n',
       'axios',
+      'libs.js',
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -80,7 +81,6 @@ module.exports = configure(function (/* ctx */) {
     framework: {
       iconSet: 'material-icons', // Quasar icon set
       lang: 'en-us', // Quasar language pack
-      config: {},
 
       // Possible values for "importStrategy":
       // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives
@@ -88,7 +88,11 @@ module.exports = configure(function (/* ctx */) {
       importStrategy: 'all',
 
       // Quasar plugins
-      plugins: []
+      plugins: [ 'Notify' ],
+
+      config: {
+         notify: { timeout: 6000 /* Notify defaults */ }
+      }
     },
 
     // animations: 'all', // --- includes all animations

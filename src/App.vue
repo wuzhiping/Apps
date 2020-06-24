@@ -4,7 +4,8 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="javascript">
+
 export default {
   name: 'App'
 }

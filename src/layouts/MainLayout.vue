@@ -30,7 +30,7 @@
     >
       <q-scroll-area class="fit">
 
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple @click="leftDrawerOpen = false;$router.push('/login')">
           <q-item-section avatar>
             <q-avatar color="primary" text-color="white">
              R
@@ -44,7 +44,7 @@
 
           <q-item-label header>Todos </q-item-label>
           <q-list v-for="(menuItem, index) in essentialLinks" :key="index">
-            <q-item clickable @click="leftDrawerOpen = false;$router.push('/login') "  
+            <q-item clickable @click="leftDrawerOpen = false;$router.push(menuItem.link) "  
                     active-class="my-menu-link"
                     :active="menuItem.link === $route.path" v-ripple>
               <q-item-section avatar>
