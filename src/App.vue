@@ -1,6 +1,8 @@
 <template>
   <div id="q-app">
-    <router-view />
+    <router-view>
+      <q-skeleton animation="wave" />
+    </router-view>
   </div>
 </template>
 
