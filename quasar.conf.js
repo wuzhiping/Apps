@@ -112,7 +112,8 @@ module.exports = configure(function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {
          skipWaiting: true,
-         clientsClaim: true
+         clientsClaim: true,
+         maximumFileSizeToCacheInBytes: 4000000,
       }, // only for GenerateSW
       manifest: {
         name: `BPM`,
