@@ -12,7 +12,7 @@ const axiosInstance = axios.create()
 
 export default boot(({ Vue, router }) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  axiosInstance.defaults.baseURL = "https://a.feg.com.tw"
+  axiosInstance.defaults.baseURL = "http://ateam.feg.cn:85"
   axiosInstance.defaults.withCredentials=true;
   axiosInstance.defaults.headers.common["TZ"] = -(new Date()).getTimezoneOffset()/60;
 

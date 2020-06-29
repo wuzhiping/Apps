@@ -25,7 +25,7 @@
             label="Auto login the next time"
             unchecked-icon="clear"/>
           <br/>
-          <q-btn flat color="warning" label="CLEAR ALL" />
+          <q-btn flat color="warning" @click="logout" label="CLEAR ALL" />
           <q-btn flat rounded color="primary" label="CANCLE" />
           <q-btn flat round color="red" @click="login" icon="camera_rear" />
           <!--q-img
@@ -50,15 +50,19 @@ export default Vue.extend({
   components: { },
   data() {
      return { 
-        uid:"",
-        pwd:"",
+        uid:"041007",
+        pwd:"111",
         save:true,
         url:"https://a.feg.com.tw/FEG/static/img/qr2.jpg"
      };
   },
   methods:{
+    logout(){
+       this.$store.commit("token/logout");
+       console.dir(this.$store.state);
+    },
     login(){
-       valid("041007","1")
+       valid(this.uid, this.pwd)
         .then((response)=>{
                 var res = response.data || {};
                 // console.dir(response);

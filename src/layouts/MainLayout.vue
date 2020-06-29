@@ -37,7 +37,8 @@
             </q-avatar>
           </q-item-section>
 
-          <q-item-section>Letter avatar-type</q-item-section>
+          <q-item-section>{{ user.fullname}} {{ user.account}}
+          </q-item-section>
         </q-item>
 
         <q-separator />
@@ -92,9 +93,14 @@ export default {
   components: {
     EssentialLink
   },
-
+  watch:{
+        '$store.state.token.userInfo': function () {
+            this.user = this.$store.state.token.userInfo ? this.$store.state.token.userInfo.user : {};
+        }
+  },
   data () {
     return {
+      user: {},
       leftDrawerOpen: false,
       essentialLinks: [
         {
