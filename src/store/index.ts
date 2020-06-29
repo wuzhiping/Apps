@@ -2,6 +2,8 @@ import { store } from 'quasar/wrappers';
 import Vuex from 'vuex';
 
 import token from './token'
+import { TokenStateInterface }  from './token/state'
+
 // import example from './module-example';
 // import { ExampleStateInterface } from './module-example/state';
 
@@ -14,7 +16,8 @@ export interface StoreInterface {
   // Define your own store structure, using submodules if needed
   // example: ExampleStateInterface;
   // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
-  example: unknown;
+  // example: unknown;
+  token: TokenStateInterface;
 }
 
 export default store(function ({ Vue }) {

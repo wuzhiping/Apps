@@ -14,5 +14,17 @@ Vue.use(iView)
 
 import Mock from 'mockjs'
 
-export default ({ app }) => { }
+export default ({ app, router, store, Vue }) => { 
+   router.beforeEach((to, from, next) => {
+      console.dir(from.path + " -> " + to.path)
+      console.dir( store.state );
+      // next();return;
+      if (store.state.token.userInfo || to.path ==='/login')
+         next()
+      else
+         next({ path: '/login' })
+
+      // next();
+  });
+}
 

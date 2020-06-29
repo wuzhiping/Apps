@@ -40,6 +40,10 @@
 <script lang="javascript">
 import Vue from 'vue';
 import Mock from 'mockjs'
+import { Notify } from 'quasar'
+
+import { valid }   from "../service/agilebpm/org/login";
+import { userMsg } from "../service/agilebpm/org/userResource";
 
 export default Vue.extend({
   name: 'PageLogin',
@@ -54,15 +58,34 @@ export default Vue.extend({
   },
   methods:{
     login(){
-       this.$store.commit("token/login", { uid:'041007'});
-       this.$router.push('/');
-       // this.$router.go(-1);
+       valid("041007","1")
+        .then((response)=>{
+                var res = response.data || {};
+                // console.dir(response);
+                if(res.isOk){
+                   userMsg()
+                    .then((result)=>{
+                          var res = result.data;
+                          if(res.isOk){
+                             this.$store.commit("token/login", res.data);
+                             this.$router.push('/');
+                          } else {
+                             Notify.create( { caption:res.code, message: res.msg, html:true})
+                          }     
+                    })
+                   .catch((error)=>{ console.dir(error); }); 
+                } else {
+                   Notify.create( { caption:res.code, message: res.msg, html:true})
+                }
+                // this.$router.go(-1);
+         })
+        .catch((error)=>{ console.dir(error); });
     }
   },
   created(){
     var data = Mock.mock({
         // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
-        'list|1-10': [{
+        'list|1-2': [{
             // 属性 id 是一个自增数，起始值为 1，每次增 1
             'id|+1': 1
         }]
