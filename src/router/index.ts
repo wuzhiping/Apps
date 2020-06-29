@@ -1,6 +1,6 @@
 import { route } from 'quasar/wrappers';
 import VueRouter from 'vue-router';
-import { StoreInterface } from '../store';
+import { StoreInterface, store } from '../store';
 import routes from './routes';
 
 /*
@@ -8,7 +8,7 @@ import routes from './routes';
  * directly export the Router instantiation
  */
 
-export default route<StoreInterface>(function ({ Vue }) {
+export default route<StoreInterface>(function ({ Vue, store }) {
   Vue.use(VueRouter);
 
   const Router = new VueRouter({
@@ -24,7 +24,14 @@ export default route<StoreInterface>(function ({ Vue }) {
 
   Router.beforeEach((to, from, next) => {
       console.dir(from.path + " -> " + to.path)
-      next();
+      console.dir(store.getters['token/UserInfo']);
+      // next();return;
+      if (store.getters['token/UserInfo'] || to.path ==='/login')
+         next()
+      else 
+         next({ path: '/login' })
+
+      //next();
   });
 
 

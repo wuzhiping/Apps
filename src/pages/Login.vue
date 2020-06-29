@@ -27,7 +27,7 @@
           <br/>
           <q-btn flat color="warning" label="CLEAR ALL" />
           <q-btn flat rounded color="primary" label="CANCLE" />
-          <q-btn flat round color="red" icon="camera_rear" />
+          <q-btn flat round color="red" @click="login" icon="camera_rear" />
           <!--q-img
            :src="url"
            spinner-color="white"
@@ -51,6 +51,13 @@ export default Vue.extend({
         save:true,
         url:"https://a.feg.com.tw/FEG/static/img/qr2.jpg"
      };
+  },
+  methods:{
+    login(){
+       this.$store.commit("token/login", { uid:'041007'});
+       this.$router.push('/');
+       // this.$router.go(-1);
+    }
   },
   created(){
     var data = Mock.mock({

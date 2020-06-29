@@ -17,6 +17,10 @@ export default Vue.extend({
   components: { DaykeepCalendarMonth  },
   data() {
     return { };
+  },
+  mounted(){
+    // this.$axios.post("/bpm/my/todoTaskList").then(response => {; })
+
   }
 });
 </script>

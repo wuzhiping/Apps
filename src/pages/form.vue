@@ -103,10 +103,14 @@ export default Vue.extend({
                                                         pwd : '',
                                                      formId : this.$route.params.formId 
                               })
-                             .catch((error)=>{ this.$Message.error("Sorry!,Try Again<br>"+error); this.$router.go(-1);});
+                             .catch((error)=>{ 
+                                  this.$Message.error("Sorry!,Try Again<br>"+error); 
+                             });
+
+        this.$q.loading.hide()
+
         if(form){
            this.loading = false;
-           this.$q.loading.hide()
            this.rule = formCreate.parseJson(JSON.stringify(form.data));
            for(var n=0;n<this.rule.length;n++){
               if(this.rule[n].field == "title"){
@@ -115,6 +119,7 @@ export default Vue.extend({
            }
         } else {
            this.$router.go(-1);   
+           return;
         }
         this.$q.notify({
            message: '<em>I can</em> <span style="color: red">use</span> <strong>HTML</strong>',
