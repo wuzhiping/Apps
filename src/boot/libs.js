@@ -17,10 +17,17 @@ import Mock from 'mockjs'
 export default ({ app, router, store, Vue }) => { 
    router.beforeEach((to, from, next) => {
       console.dir(from.path + " -> " + to.path)
-      console.dir( store.state );
+      // console.dir( store.state );
       // next();return;
-      if (store.state.token.userInfo || to.path ==='/login')
+      console.dir(to);
+      if (store.state.token.userInfo || (to.meta.open || false) ){
+
+         store.commit("token/where", { title: to.meta.title || to.path,
+                                        back: to.meta.back  || false,
+                                       color: to.meta.color || "linear-gradient(90deg,#595f69,#2173dc,#696969)"
+                                     });
          next()
+      }
       else
          next({ path: '/login' })
 

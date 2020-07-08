@@ -1,8 +1,9 @@
 <template>
   <q-layout view="hHh Lpr lFf">
-    <q-header elevated style="background:linear-gradient(90deg,#595f69,#2173dc,#696969);">
+    <q-header elevated :style="{ background:$store.state.token.color }">
       <q-toolbar>
         <q-btn
+          v-if="!$store.state.token.back"
           flat
           dense
           round
@@ -10,12 +11,12 @@
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-
-        <q-toolbar-title>
-          Risk Management
-        </q-toolbar-title>
-
-        <div>{{ $q.lang.nativeName }}</div>
+        <q-btn v-if="$store.state.token.back"
+           flat round dense icon="more" 
+           @click="$router.go(-1)"
+        />
+        <q-toolbar-title>{{$store.state.token.title}}</q-toolbar-title>
+        <div>{{ $q.lang.nativeName }}</div><span> </span>
       </q-toolbar>
     </q-header>
 
@@ -24,40 +25,39 @@
       overlay
       :width="290"
       :breakpoint="700"
-      behavior="desktop" 
+      behavior="desktop"
       bordered
       content-class="bg-grey-1"
     >
       <q-scroll-area class="fit">
-
         <q-item clickable v-ripple @click="leftDrawerOpen = false;$router.push('/login')">
           <q-item-section avatar>
-            <q-avatar color="primary" text-color="white">
-             R
-            </q-avatar>
+            <q-avatar color="primary" text-color="white">R</q-avatar>
           </q-item-section>
 
-          <q-item-section>{{ user.fullname}} {{ user.account}}
-          </q-item-section>
+          <q-item-section>{{ user.fullname}} {{ user.account}}</q-item-section>
         </q-item>
 
         <q-separator />
-
-          <q-item-label header>Todos </q-item-label>
-          <q-list v-for="(menuItem, index) in essentialLinks" :key="index">
-            <q-item clickable @click="leftDrawerOpen = false;$router.push(menuItem.link) "  
-                    active-class="my-menu-link"
-                    :active="menuItem.link === $route.path" v-ripple>
+        <template v-for="(menuItem, index) in essentialLinks">
+          <q-item-label header :key="index">{{menuItem.title}}</q-item-label>
+          <q-list v-for="(menuItem, sindex) in menuItem.essentialLinks" :key="sindex+'|'+index">
+            <q-item
+              clickable
+              @click="leftDrawerOpen = false;$router.push(menuItem.link) "
+              active-class="my-menu-link"
+              :active="menuItem.link === $route.path"
+              v-ripple
+            >
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
               </q-item-section>
-              <q-item-section>
-                {{ menuItem.title }}
-              </q-item-section>
+              <q-item-section>{{ menuItem.title }}</q-item-section>
             </q-item>
 
-           <q-separator v-if="menuItem.separator" />
+            <q-separator v-if="menuItem.separator" />
           </q-list>
+        </template>
       </q-scroll-area>
       <!--q-list>
         <q-item-label
@@ -76,81 +76,97 @@
     </q-drawer>
 
     <q-page-container>
-      <transition  appear  enter-active-class="animated fadeIn"  leave-active-class="animated fadeOut">
-         <router-view />
+      <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+        <router-view />
       </transition>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
-import languages from 'quasar/lang/index.json'
+import EssentialLink from "components/EssentialLink.vue";
+import languages from "quasar/lang/index.json";
 
 export default {
-  name: 'MainLayout',
+  name: "MainLayout",
 
   components: {
     EssentialLink
   },
-  watch:{
-        '$store.state.token.userInfo': function () {
-            this.user = this.$store.state.token.userInfo ? this.$store.state.token.userInfo.user : {};
-        }
+  watch: {
+    "$store.state.token.userInfo": function() {
+      this.user = this.$store.state.token.userInfo
+        ? this.$store.state.token.userInfo.user
+        : {};
+    }
   },
-  data () {
+  data() {
     return {
       user: {},
       leftDrawerOpen: false,
       essentialLinks: [
         {
-          title: 'Calendar',
-          caption: 'Calendar',
-          icon: 'today',
-          link: '/'
+          title: "Toto",
+          essentialLinks: [
+            {
+              title: "TotoTask",
+              caption: "TotoTask",
+              icon: "today",
+              link: "/agilebpm/bpm/my/todoTaskList"
+            }
+          ]
         },
         {
-          title: 'Inbox',
-          caption: 'Inbox',
-          icon: 'inbox',
-          link: '/inbox'
-        },
-        {
-          title: 'Outbox',
-          caption: 'Outbox',
-          icon: 'outbox',
-          separator: true,
-          link: '/history'
-        },
-        {
-          title: 'eGate',
-          caption: 'eGate',
-          icon: 'help',
-          separator: true,
-          link: '/form/egate'
-        },
-
+          title: "Other",
+          essentialLinks: [
+            {
+              title: "Calendar",
+              caption: "Calendar",
+              icon: "today",
+              link: "/"
+            },
+            {
+              title: "Inbox",
+              caption: "Inbox",
+              icon: "inbox",
+              link: "/inbox"
+            },
+            {
+              title: "Outbox",
+              caption: "Outbox",
+              icon: "outbox",
+              separator: true,
+              link: "/history"
+            },
+            {
+              title: "eGate",
+              caption: "eGate",
+              icon: "help",
+              separator: true,
+              link: "/form/egate"
+            }
+          ]
+        }
       ]
-    }
+    };
   },
-  methods:{
-    lang (lang) {
+  methods: {
+    lang(lang) {
       // dynamic import, so loading on demand only
       import(
         /* webpackInclude: /(vi|en-us|zh-hant)\.js$/ */
         `quasar/lang/${lang}`
-        ).then(lang => {
-        this.$q.lang.set(lang.default)
-      })
+      ).then(lang => {
+        this.$q.lang.set(lang.default);
+      });
     }
   },
-  created(){
-     //console.dir( languages );
-     //console.dir( this.$q.lang.getLocale() );
-     this.lang( "zh-hant" );
+  created() {
+    //console.dir( languages );
+    //console.dir( this.$q.lang.getLocale() );
+    this.lang("zh-hant");
   }
-
-}
+};
 </script>
 
 <style lang="sass">

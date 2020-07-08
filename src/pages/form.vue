@@ -1,5 +1,5 @@
 <template>
-  <q-page padding style="backgroundx:#f0f0f0;">
+  <q-page padding style="backgroundx:#f0f0f0;" class="scoped">
      <form-create ref="f" v-model="xxx" :rule="rule" :option="option"></form-create>
      <Row v-if="!loading">
         <i-col span="7" offset="7">
@@ -50,7 +50,7 @@ export default Vue.extend({
   },
   methods: {
       API(url,payload){
-          return this.$axios.post('/BDD/API/'+url, payload);
+          return this.$axios.post('https://a.feg.com.tw/BDD/API/'+url, payload);
       },
       onReset(){
           var form = this.$refs["f"].$f;
@@ -66,7 +66,7 @@ export default Vue.extend({
                 console.dir("验证通过");
                 console.dir(form.formData());
 
-                that.$axios.post('/oauth2/form', form.formData()).then((res) => {
+                that.$axios.post('https://a.feg.com.tw/oauth2/form', form.formData()).then((res) => {
                     console.dir(res.data.data);
                     this.$Message.info("已提交");
                     that.$router.go(-1);
@@ -99,7 +99,7 @@ export default Vue.extend({
   mounted: async function () {
         var that = this;
         var form = await this.API('bpm/comm/form/demo',{
-                                                        uid : 'vip05',
+                                                        uid : (this.$store.state.token || { userInfo: { user: {} }}).userInfo.user.account || 'vip05',
                                                         pwd : '',
                                                      formId : this.$route.params.formId 
                               })
@@ -131,12 +131,12 @@ export default Vue.extend({
 </script>
 
 <style lang="stylus" scoped>
-h4
+.scoped >>> h4
   font-size 100%
 
-.ivu-form, .ivu-row
+.scoped >>> .ivu-form, .scoped >>> .ivu-row
   max-width 800px
-.ivu-form
+.scoped >>> .ivu-form
   .ivu-form-item-label
     font-weight bold
     opacity 0.9
@@ -147,10 +147,10 @@ h4
     text-overflow ellipsis
     white-space nowrap
 
-.ivu-form-item-error-tip
+.scoped >>> .ivu-form-item-error-tip
   padding-top 0
   font-size 8px
-.ivu-input-wrapper-large
+.scoped >>> .ivu-input-wrapper-large
   .ivu-input-icon
     line-height 32px
   .ivu-input-prefix
@@ -159,10 +159,10 @@ h4
   .ivu-input-suffix
     i
       line-height 32px
-.ivu-form-item
+.scoped >>> .ivu-form-item
   margin-bottom 14px
 
-.search-loading
+.scoped >>> .search-loading
     margin-top 30%
     display flex
     justify-content center

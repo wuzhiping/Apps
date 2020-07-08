@@ -50,8 +50,8 @@ export default Vue.extend({
   components: { },
   data() {
      return { 
-        uid:"041007",
-        pwd:"111",
+        uid: localStorage.getItem("account") || "admin",
+        pwd: localStorage.getItem("pwd") || "" ,
         save:true,
         url:"https://a.feg.com.tw/FEG/static/img/qr2.jpg"
      };
@@ -60,13 +60,20 @@ export default Vue.extend({
     logout(){
        this.$store.commit("token/logout");
        console.dir(this.$store.state);
+       this.pwd="";
+       localStorage.setItem("pwd", "");
     },
     login(){
        valid(this.uid, this.pwd)
         .then((response)=>{
+                localStorage.setItem("account", this.uid);
+                localStorage.setItem("pwd", "");
                 var res = response.data || {};
                 // console.dir(response);
                 if(res.isOk){
+                   if(this.save)
+                      localStorage.setItem("pwd", this.pwd);
+
                    userMsg()
                     .then((result)=>{
                           var res = result.data;

@@ -1,0 +1,74 @@
+import { axiosInstance } from 'boot/axios'
+
+export function getOpinion(instId, taskId) {
+    const p = new Promise(function (resolve, reject) {
+        return axiosInstance
+            .post("/bpm/instance/getOpinion?instId=" + instId + "&taskId=" + taskId)
+            .then(response => {
+                //console.dir(response)
+                //state.dispatch('userInfoBpm', data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+    return p
+}
+
+export function getById(instId) {
+    const p = new Promise(function (resolve, reject) {
+        return axiosInstance
+            .post("/bpm/instance/getById?instId=" + instId)
+            .then(response => {
+                //console.dir(response)
+                //state.dispatch('userInfoBpm', data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+    return p
+}
+
+export function flowImage(instId, defId, taskId) {
+    const p = new Promise(function (resolve, reject) {
+        return axiosInstance
+            .get("/bpm/instance/flowImage?instId=" + instId + "&defId=" + defId + "&taskId=" + taskId, { responseType: 'arraybuffer' })
+            .then(response => {
+                let image = btoa(
+                    new Uint8Array(response.data).reduce(
+                        (data, byte) => data + String.fromCharCode(byte),
+                        ""
+                    )
+                );
+                let data = `data:${response.headers[
+                    "content-type"
+                ].toLowerCase()};base64,${image}`;
+                //console.dir(response)
+                //state.dispatch('userInfoBpm', data)
+                resolve(data)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+    return p
+}
+
+export function getFlowImageInfo(instanceId, defId, taskId) {
+    const p = new Promise(function (resolve, reject) {
+        return axiosInstance
+            .post("/bpm/instance/getFlowImageInfo?instanceId=" + instanceId + "&defId=" + defId + "&taskId=" + taskId)
+            .then(response => {
+                //console.dir(response)
+                //state.dispatch('userInfoBpm', data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+    return p
+}
