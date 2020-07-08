@@ -72,3 +72,17 @@ export function getFlowImageInfo(instanceId, defId, taskId) {
     })
     return p
 }
+
+export function doAction(data) {
+    const p = new Promise(function (resolve, reject) {
+        return axiosInstance
+            .post("/bpm/instance/doAction", data)
+            .then(response => {
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+    return p
+}

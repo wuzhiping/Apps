@@ -19,7 +19,6 @@ export default boot(({ app, Vue, router }) => {
   axiosInstance.defaults.withCredentials=true;
   axiosInstance.defaults.headers.common["TZ"] = -(new Date()).getTimezoneOffset()/60;
   
-  console.dir(app.i18n.locale);
   // axiosInstance.defaults.headers.common["i18n"] =  app.i18n.locale;
   // axios.defaults.retry = 2;
   // axios.defaults.retryDelay = 2000;
@@ -27,7 +26,7 @@ export default boot(({ app, Vue, router }) => {
 
   //
   axiosInstance.interceptors.request.use(function (config) {
-       axiosInstance.defaults.headers.common["i18n"] =  app.i18n.locale;
+       // axiosInstance.defaults.headers.common["i18n"] =  app.i18n.locale;
        return config;
   }, function (error) {
     // Do something with request error

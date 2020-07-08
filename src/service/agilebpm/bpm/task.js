@@ -2,14 +2,9 @@ import { axiosInstance } from 'boot/axios'
 
 export function doAction(data) {
     const p = new Promise(function (resolve, reject) {
-
-
-
         return axiosInstance
             .post("/bpm/task/doAction", data)
             .then(response => {
-                //console.dir(response)
-                //state.dispatch('userInfoBpm', data)
                 resolve(response)
             })
             .catch(error => {

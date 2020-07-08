@@ -11,7 +11,8 @@ const routes: RouteConfig[] = [
       { path: 'login', 
         meta: { open:true, title:"Authoration", back:true, color:"#f44336" },
         component: () => import('pages/Login.vue') },
-      { path: 'agilebpm/bpm/my/todoTaskList', 
+      {
+        path: 'agilebpm/bpm/my/todoTaskList', name: 'todoTaskList', 
         meta: { title:"todos", back:true, color:"blue" },
         component: () => import('pages/agilebpm/bpm/my/todoTaskList.vue') },
       {
@@ -20,7 +21,7 @@ const routes: RouteConfig[] = [
       },
       {
         path: 'form/:formId', name: 'form', props: true,
-        meta: { title:"Forms",color:"gray"},
+        meta: { title:"Forms",color:"gray", back:true},
         component: () => import('pages/form.vue')
       },
     ],

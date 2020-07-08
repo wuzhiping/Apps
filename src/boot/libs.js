@@ -13,13 +13,14 @@ Vue.use(VueQrcodeReader)
 Vue.use(iView)
 
 import Mock from 'mockjs'
+import { userMsg } from "../service/agilebpm/org/userResource";
 
 export default ({ app, router, store, Vue }) => { 
    router.beforeEach((to, from, next) => {
       console.dir(from.path + " -> " + to.path)
+
       // console.dir( store.state );
       // next();return;
-      console.dir(to);
       if (store.state.token.userInfo || (to.meta.open || false) ){
 
          store.commit("token/where", { title: to.meta.title || to.path,
@@ -28,8 +29,22 @@ export default ({ app, router, store, Vue }) => {
                                      });
          next()
       }
-      else
-         next({ path: '/login' })
+      else {
+         // console.dir("auto");
+         userMsg()
+            .then((result)=>{
+                  var res = result.data;
+                  // console.dir(res.data);
+
+                  if(res.isOk){
+                     store.commit("token/login", res.data);
+                     next();
+                  } else {
+                     next({ path: '/login' })
+                  }
+            })
+           .catch((error)=>{ console.dir(error); next({ path: '/login' })  });
+      }
 
       // next();
   });
