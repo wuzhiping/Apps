@@ -35,7 +35,7 @@ export function getById(instId) {
 export function flowImage(instId, defId, taskId) {
     const p = new Promise(function (resolve, reject) {
         return axiosInstance
-            .get("/bpm/instance/flowImage?instId=" + instId + "&defId=" + defId + "&taskId=" + taskId, { responseType: 'arraybuffer' })
+            .get("/bpm/instance/flowImage?instId=" + (instId || "") + "&defId=" + (defId || "") + "&taskId=" + (taskId || ""), { responseType: 'arraybuffer' })
             .then(response => {
                 let image = btoa(
                     new Uint8Array(response.data).reduce(
@@ -77,6 +77,26 @@ export function doAction(data) {
     const p = new Promise(function (resolve, reject) {
         return axiosInstance
             .post("/bpm/instance/doAction", data)
+            .then(response => {
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+    return p
+}
+
+export function getInstanceData(instanceId, readonly, defId, flowKey, formType) {
+    const p = new Promise(function (resolve, reject) {
+        let formData = new FormData();
+        formData.append("instanceId", instanceId || "");
+        formData.append("readonly", readonly || "");
+        formData.append("defId", defId || "");
+        formData.append("flowKey", flowKey || "");
+        formData.append("formType", formType || "");
+        return axiosInstance
+            .post("/bpm/instance/getInstanceData", formData)
             .then(response => {
                 resolve(response)
             })

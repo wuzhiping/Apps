@@ -16,6 +16,16 @@ const routes: RouteConfig[] = [
         meta: { title:"todos", back:true, color:"blue" },
         component: () => import('pages/agilebpm/bpm/my/todoTaskList.vue') },
       {
+        path: 'agilebpm/bpm/definition/definitionList', name: 'definitionList',
+        meta: { title: "definitions", color: "blue" },
+        component: () => import('pages/agilebpm/bpm/definition/definitionList.vue')
+      },
+      {
+        path: 'agilebpm/bpm/definition/start/:defId', name: 'start',
+        meta: { title: "start", back: true, color: "blue" }, props: true,
+        component: () => import('pages/agilebpm/bpm/definition/start.vue')
+      },
+      {
         path: 'agilebpm/bpm/task/taskComplete/:id', name: 'taskComplete',
         props: true, component: () => import('pages/agilebpm/bpm/task/taskComplete.vue')
       },
@@ -23,6 +33,13 @@ const routes: RouteConfig[] = [
         path: 'form/:formId', name: 'form', props: true,
         meta: { title:"Forms",color:"gray", back:true},
         component: () => import('pages/form.vue')
+      },
+      {
+        path: 'news/list',
+        meta: {
+          title: "News", color: "gray",
+          keepAlive: true },
+        component: () => import('pages/news/list.vue')
       },
     ],
   },

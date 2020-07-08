@@ -11,12 +11,10 @@
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-        <q-btn v-if="$store.state.token.back"
-           flat round dense icon="more" 
-           @click="$router.go(-1)"
-        />
+        <q-btn v-if="$store.state.token.back" flat round dense icon="more" @click="$router.go(-1)" />
         <q-toolbar-title>{{$store.state.token.title}}</q-toolbar-title>
-        <div>{{ $q.lang.nativeName }}</div><span> </span>
+        <div>{{ $q.lang.nativeName }}</div>
+        <span></span>
       </q-toolbar>
     </q-header>
 
@@ -77,7 +75,12 @@
 
     <q-page-container>
       <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-        <router-view />
+        <keep-alive>
+          <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+      </transition>
+      <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
       </transition>
     </q-page-container>
   </q-layout>
@@ -109,6 +112,12 @@ export default {
           title: "Toto",
           essentialLinks: [
             {
+              title: "Definition",
+              caption: "Definition",
+              icon: "today",
+              link: "/agilebpm/bpm/definition/definitionList"
+            },
+            {
               title: "TotoTask",
               caption: "TotoTask",
               icon: "today",
@@ -119,6 +128,12 @@ export default {
         {
           title: "Other",
           essentialLinks: [
+            {
+              title: "News",
+              caption: "News",
+              icon: "news",
+              link: "/news/list"
+            },
             {
               title: "Calendar",
               caption: "Calendar",

@@ -1,0 +1,294 @@
+<template>
+  <div style="background:#f0f0f0;">
+    <q-card class="my-card">
+      <q-card-section>
+        <q-item clickable v-ripple>
+          <q-item-section side>
+            <q-avatar rounded size="48px">
+              <img src="https://cdn.quasar.dev/img/avatar.png" />
+              <q-badge floating color="teal">new</q-badge>
+            </q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Mary</q-item-label>
+            <q-item-label caption>2 new messages</q-item-label>
+          </q-item-section>
+          <q-item-section side>3 min ago</q-item-section>
+        </q-item>
+        <q-separator spaced />
+        <div class="row" v-for="(value, name) in task" :key="name">
+          <div class="col-6">{{name}}</div>
+          <div class="col-6">{{value}}</div>
+        </div>
+      </q-card-section>
+    </q-card>
+    <q-card class="my-card" style="margin-top: 10px;">
+      <q-card-section>
+        <div class="row" v-for="(value, name) in vars" :key="name">
+          <div class="col-6">{{name}}</div>
+          <div class="col-6">{{value}}</div>
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <q-card class="my-card" style="margin-top: 10px;">
+      <q-card-section>
+        <q-timeline color="secondary">
+          <q-timeline-entry
+            v-for="(op, index) in opinion"
+            :key="index"
+            :title="op.taskName"
+            :subtitle="op.createTime"
+            icon="delete"
+          >
+            <div v-for="(v,n) in op">{{n}}: {{v}}</div>
+          </q-timeline-entry>
+        </q-timeline>
+
+        <!-- <q-timeline color="secondary">
+          <q-timeline-entry
+            v-for="(op, index) in opinion"
+            :key="index"
+            :title="op.taskName"
+            :subtitle="op.createTime"
+          >
+            <div>*************</div>
+          </q-timeline-entry>
+        </q-timeline>-->
+      </q-card-section>
+    </q-card>
+    <img :src="flowImage" />
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <q-fab
+          color="purple"
+          icon="keyboard_arrow_up"
+          direction="up"
+        >
+          <q-fab-action
+            color="primary"
+            :label="bl.name"
+            @click="doA(bl)"
+            v-for="(bl, index) in buttonList"
+            :key="index"
+          />
+        </q-fab>
+    </q-page-sticky>
+  </div>
+</template>
+
+<script lang="javascript">
+import Vue from "vue";
+import {
+  getBpmTask,
+  getVariables,
+  getTaskData,
+  doAction
+} from "../../../../service/agilebpm/bpm/task";
+import {
+  getOpinion,
+  flowImage,
+  getFlowImageInfo
+} from "../../../../service/agilebpm/bpm/instance";
+
+import { axiosInstance } from "boot/axios";
+
+export default Vue.extend({
+  name: "todoTaskList",
+  props: ["id"],
+  components: {},
+  data() {
+    return {
+      task: {},
+      opinion: [],
+      vars: {},
+      datas: {},
+      flowImage: null,
+      flowImageInfo: null
+    };
+  },
+  computed: {
+    buttonList: function() {
+      if (this.datas && this.datas.buttonList)
+        return this.datas.buttonList.filter(function(value) {
+          var act = ["agree", "reject"];
+          return act.indexOf(value.alias) > -1;
+        });
+      else return [];
+    }
+  },
+  methods: {
+    getTask() {
+      getBpmTask(this.id)
+        .then(response => {
+          // console.dir(response);
+          if (response.data.isOk) {
+            this.task = response.data.data;
+            this.getOp();
+            //this.getVar();
+            this.getData();
+            this.getFlowImage();
+            // this.getFII();
+            this.gettask(this.task.defId, this.task.instId, this.task.taskId);
+          } else {
+            this.$q.notify({
+              caption: response.data.code,
+              message: response.data.msg,
+              html: true
+            });
+          }
+          // this.$router.go(-1);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
+    getOp() {
+      getOpinion(this.task.instId, this.task.taskId)
+        .then(response => {
+          // console.dir(response);
+          if (response.data.isOk) {
+            this.opinion = response.data.data.reverse();
+          } else {
+            this.$q.notify({
+              caption: response.data.code,
+              message: response.data.msg,
+              html: true
+            });
+          }
+          // this.$router.go(-1);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
+    getVar() {
+      getVariables(this.task.taskId, false)
+        .then(response => {
+          // console.dir(response);
+          if (response.data.isOk) {
+            this.vars = response.data.data;
+          } else {
+            this.$q.notify({
+              caption: response.data.code,
+              message: response.data.msg,
+              html: true
+            });
+          }
+          // this.$router.go(-1);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
+    getData() {
+      getTaskData(this.task.taskId, "pc")
+        .then(response => {
+          // console.dir(response);
+          if (response.data.isOk) {
+            this.datas = response.data.data;
+          } else {
+            this.$q.notify({
+              caption: response.data.code,
+              message: response.data.msg,
+              html: true
+            });
+          }
+          // this.$router.go(-1);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
+    getFlowImage() {
+      flowImage(this.task.instId, this.task.defId, this.task.taskId)
+        .then(response => {
+          this.flowImage = response;
+          // this.$router.go(-1);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
+    getFII() {
+      getFlowImageInfo(this.task.instId, this.task.defId, this.task.taskId)
+        .then(response => {
+          if (response.data.isOk) {
+            this.flowImageInfo = response.data.data;
+          } else {
+            this.$q.notify({
+              caption: response.data.code,
+              message: response.data.msg,
+              html: true
+            });
+          }
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
+    gettask(defId, instId, taskId) {
+      axiosInstance
+        .post("/BDD/API/bpm/comm/form/task", {
+          defId: "", //defId,
+          id: instId,
+          taskId: "" //taskId
+        })
+        .then(response => {
+          //console.dir(response)
+          //state.dispatch('userInfoBpm', data)
+          console.dir(response);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
+    doA(action) {
+      doAction({
+        taskId: this.task.taskId,
+        nodeId: this.task.nodeId,
+        instanceId: this.task.instId,
+        data: {
+          bizId: "bizId" //this.vars["__BizKey__"],
+          //variables: this.vars
+        },
+        action: action.alias,
+        extendConf: {
+          nodeId: ""
+        },
+        opinion: action.name
+      })
+        .then(response => {
+          if (response.data.code == 200) {
+            this.$q.notify({
+              progress: true,
+              message: action.alias + " ok",
+              color: "primary",
+              timeout: 2000
+            });
+            setTimeout(() => {
+              this.$router.push({ name: "todoTaskList" }).catch(err => {});
+            }, 3000);
+          } else {
+            this.$q.notify({
+              progress: true,
+              message: action.alias + " error " + response.data.msg,
+              color: "primary",
+              timeout: 2000
+            });
+          }
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    }
+  },
+  mounted() {
+    this.getTask();
+  }
+});
+</script>
+
+<style lang="sass">
+
+</style>
+
