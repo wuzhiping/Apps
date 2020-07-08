@@ -10,7 +10,7 @@ declare module 'vue/types/vue' {
 
 const axiosInstance = axios.create()
 
-export default boot(({ Vue, router }) => {
+export default boot(({ app, Vue, router }) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.dir( process.env.DEV )
   if(process.env.DEV)
@@ -18,11 +18,21 @@ export default boot(({ Vue, router }) => {
 
   axiosInstance.defaults.withCredentials=true;
   axiosInstance.defaults.headers.common["TZ"] = -(new Date()).getTimezoneOffset()/60;
-
+  
+  console.dir(app.i18n.locale);
+  // axiosInstance.defaults.headers.common["i18n"] =  app.i18n.locale;
   // axios.defaults.retry = 2;
   // axios.defaults.retryDelay = 2000;
   axiosInstance.defaults.timeout = 8000;
 
+  //
+  axiosInstance.interceptors.request.use(function (config) {
+       axiosInstance.defaults.headers.common["i18n"] =  app.i18n.locale;
+       return config;
+  }, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }); 
   //
   axiosInstance.interceptors.response.use((response) => {
         // console.dir(response);
