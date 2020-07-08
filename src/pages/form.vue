@@ -3,10 +3,10 @@
      <form-create ref="f" v-model="xxx" :rule="rule" :option="option"></form-create>
      <Row v-if="!loading">
         <i-col span="7" offset="7">
-           <i-button type="error" @click="onSubmit">送出 Submit</i-button>
+           <i-button type="error" @click="onSubmit">{{$t('form.submit')}}</i-button>
         </i-col>
         <i-col span="7" offset="2">
-           <i-button type="info" @click="onReset">取消 Reset</i-button>
+           <i-button type="info" @click="onReset">{{$t('form.reset')}}</i-button>
         </i-col>
      </Row>
      <br>

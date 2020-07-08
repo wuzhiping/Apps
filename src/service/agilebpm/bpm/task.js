@@ -2,26 +2,7 @@ import { axiosInstance } from 'boot/axios'
 
 export function doAction(data) {
     const p = new Promise(function (resolve, reject) {
-        // {
-        //     "taskId": "417722184227356673",
-        //         "nodeId": "UserTask1",
-        //             "instanceId": "417722184124596225",
-        //                 "data": {
-        //         "bizId": "BIZ",
-        //             "variables": {
-        //             "TITLE": "TITLE-SKI",
-        //                 "VAR1": "SKI",
-        //                     "Num": 0,
-        //                         "CustomId": "CustomId",
-        //                             "__BizKey__": "BIZ"
-        //         }
-        //     },
-        //     "action": "agree",
-        //         "extendConf": {
-        //         "nodeId": ""
-        //     },
-        //     "opinion": "同意"
-        // }
+
 
 
         return axiosInstance

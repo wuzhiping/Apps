@@ -158,6 +158,8 @@ export default {
         `quasar/lang/${lang}`
       ).then(lang => {
         this.$q.lang.set(lang.default);
+        this.$i18n.locale = this.$q.lang.isoName;
+        console.dir(this.$q.lang.isoName);
       });
     }
   },

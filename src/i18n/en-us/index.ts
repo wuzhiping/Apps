@@ -3,5 +3,9 @@
 
 export default {
   failed: 'Action failed',
-  success: 'Action was successful'
+  success: 'Action was successful',
+  form: {
+     submit: 'Submit',
+     reset: 'Reset'
+  }
 };
