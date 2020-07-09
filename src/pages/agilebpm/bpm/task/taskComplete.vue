@@ -57,21 +57,18 @@
         </q-timeline>-->
       </q-card-section>
     </q-card>
+    <form-create ref="f" v-model="form.xxx" :rule="form.rule" :option="form.option"></form-create>
     <img :src="flowImage" />
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-fab
-          color="purple"
-          icon="keyboard_arrow_up"
-          direction="up"
-        >
-          <q-fab-action
-            color="primary"
-            :label="bl.name"
-            @click="doA(bl)"
-            v-for="(bl, index) in buttonList"
-            :key="index"
-          />
-        </q-fab>
+      <q-fab color="purple" icon="keyboard_arrow_up" direction="up">
+        <q-fab-action
+          color="primary"
+          :label="bl.name"
+          @click="doA(bl)"
+          v-for="(bl, index) in buttonList"
+          :key="index"
+        />
+      </q-fab>
     </q-page-sticky>
   </div>
 </template>
@@ -89,7 +86,7 @@ import {
   flowImage,
   getFlowImageInfo
 } from "../../../../service/agilebpm/bpm/instance";
-
+import { dev } from "../../../../service/BDD/API/bpm/comm/form";
 import { axiosInstance } from "boot/axios";
 
 export default Vue.extend({
@@ -103,14 +100,48 @@ export default Vue.extend({
       vars: {},
       datas: {},
       flowImage: null,
-      flowImageInfo: null
+      flowImageInfo: null,
+      form: {
+        xxx: {},
+        rule: [],
+        option: {
+          form: {
+            labelPosition: "top",
+            labelWidth: undefined,
+            size: "large",
+            showMessage: true
+          },
+          row: {
+            gutter: 10
+          },
+          onSubmit: function(formData) {
+            vm.onSubmit(formData);
+          },
+          submitBtn: {
+            show: false,
+            type: "info",
+            long: true,
+            innerText: "save",
+            loading: false,
+            col: { span: 8 }
+          },
+          resetBtn: false
+        }
+      }
     };
   },
   computed: {
     buttonList: function() {
       if (this.datas && this.datas.buttonList)
         return this.datas.buttonList.filter(function(value) {
-          var act = ["agree", "reject"];
+          var act = [
+            "agree",
+            "reject",
+            "reject2Start",
+            "oppose",
+            "manualEnd",
+            "turn"
+          ];
           return act.indexOf(value.alias) > -1;
         });
       else return [];
@@ -261,7 +292,7 @@ export default Vue.extend({
           if (response.data.code == 200) {
             this.$q.notify({
               progress: true,
-              message: action.alias + " ok",
+              message: action.alias + " ok " + response.data.msg,
               color: "primary",
               timeout: 2000
             });
@@ -279,6 +310,42 @@ export default Vue.extend({
         })
         .catch(error => {
           console.dir(error);
+        });
+    },
+    loadForm: async function() {
+      var that = this;
+      dev({
+        uid:
+          (this.$store.state.token || { userInfo: { user: {} } }).userInfo.user
+            .account || "vip05",
+        pwd: "",
+        formId: this.$route.params.formId,
+        action: "task"
+      })
+        .then(response => {
+          var form = response;
+          this.$q.loading.hide();
+
+          if (form) {
+            this.loading = false;
+            this.rule = formCreate.parseJson(JSON.stringify(form.data));
+            for (var n = 0; n < this.rule.length; n++) {
+              if (this.rule[n].field == "title") {
+                break;
+              }
+            }
+          } else {
+            this.$router.go(-1);
+            return;
+          }
+          this.$q.notify({
+            message:
+              '<em>I can</em> <span style="color: red">use</span> <strong>HTML</strong>',
+            html: true
+          });
+        })
+        .catch(error => {
+          this.$Message.error("Sorry!,Try Again<br>" + error);
         });
     }
   },

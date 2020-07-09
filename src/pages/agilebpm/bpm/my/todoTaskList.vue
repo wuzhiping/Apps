@@ -1,9 +1,10 @@
 <template>
-  <q-page class="row items-center justify-evenly" style="background:#f0f0f0;">
+  <q-page v-scroll="scrolled" class="row items-center justify-evenly" style="background:#f0f0f0;">
     <q-list bordered separator>
       <q-item clickable v-ripple v-for="(item, index) in tasks" :key="index" class="caption">
         <q-item-section @click="openTask(item)">
-          <p>{{item.subject}}</p>
+          <H1 style="color:red;">{{item.subject}}</H1>
+          <div v-for="(v,o) in item">{{o}}: {{v}}</div>
         </q-item-section>
       </q-item>
     </q-list>
@@ -21,7 +22,7 @@ export default Vue.extend({
   data() {
     return {
       query: {
-        limit: 10,
+        limit: 3,
         sort: "",
         order: "",
         filter: ""
@@ -38,7 +39,16 @@ export default Vue.extend({
         this.getList()
     }
   },
+  deactivated(){
+      console.dir("deactivated..");
+  },
+  activated(){
+      console.dir("activated..");
+  },
   methods: {
+    scrolled (position) {
+       // console.dir(position);
+    },
     openTask(task) {
       this.$router
         .push({ name: "taskComplete", params: { id: task.id } })

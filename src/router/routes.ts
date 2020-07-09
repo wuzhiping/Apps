@@ -8,32 +8,40 @@ const routes: RouteConfig[] = [
       { path: '',
          meta: { open:false, title:"Risk Management" },
         component: () => import('pages/Index.vue') },
+
       { path: 'login', 
         meta: { open:true, title:"Authoration", back:true, color:"#f44336" },
         component: () => import('pages/Login.vue') },
+
       {
         path: 'agilebpm/bpm/my/todoTaskList', name: 'todoTaskList', 
-        meta: { title:"todos", back:true, color:"blue" },
+        meta: {
+          title: "todos", color: "blue"},
         component: () => import('pages/agilebpm/bpm/my/todoTaskList.vue') },
+
       {
         path: 'agilebpm/bpm/definition/definitionList', name: 'definitionList',
         meta: { title: "definitions", color: "blue" },
         component: () => import('pages/agilebpm/bpm/definition/definitionList.vue')
       },
+
       {
         path: 'agilebpm/bpm/definition/start/:defId', name: 'start',
         meta: { title: "start", back: true, color: "blue" }, props: true,
         component: () => import('pages/agilebpm/bpm/definition/start.vue')
       },
+
       {
         path: 'agilebpm/bpm/task/taskComplete/:id', name: 'taskComplete',
         props: true, component: () => import('pages/agilebpm/bpm/task/taskComplete.vue')
       },
+
       {
         path: 'form/:formId', name: 'form', props: true,
         meta: { title:"Forms",color:"gray", back:true},
         component: () => import('pages/form.vue')
       },
+
       {
         path: 'news/list',
         meta: {

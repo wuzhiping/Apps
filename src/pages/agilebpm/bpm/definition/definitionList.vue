@@ -9,7 +9,8 @@
         class="caption"
       >
         <q-item-section @click="openDefinition(item)">
-          <p>{{item.name}}</p>
+          <H1 style="color:red;">{{item.name}}</H1>
+          <div v-for="(v, o) in item">{{o}}: {{v}}</div> 
         </q-item-section>
       </q-item>
     </q-list>

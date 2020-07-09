@@ -21,6 +21,8 @@ export default route<StoreInterface>(function ({ Vue }) {
         }
       } else if (savedPosition) {
         return savedPosition
+      } else if (to.meta.saved_position) {
+        return to.meta.saved_position
       } else {
         return { x: 0, y: 0 }
       }
@@ -32,6 +34,13 @@ export default route<StoreInterface>(function ({ Vue }) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
+  });
+
+  Router.beforeEach((to, from, next) => {
+    if (from.meta.keepAlive) {
+      from.meta.saved_position = { x: 0, y: document.documentElement.scrollTop };
+    }
+    next();
   });
 
   return Router;
