@@ -1,5 +1,7 @@
 # BPM (app)
 
+# https://material.io/resources/icons/?style=baseline
+
 sudo npm install -g @quasar/cli
 
 ## quasar create App

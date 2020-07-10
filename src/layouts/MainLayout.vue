@@ -21,7 +21,7 @@
     <q-drawer
       v-model="leftDrawerOpen"
       overlay
-      :width="290"
+      :width="220"
       :breakpoint="700"
       behavior="desktop"
       bordered
@@ -109,19 +109,31 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: [
         {
-          title: "Toto",
+          title: "Office",
           essentialLinks: [
             {
-              title: "Definition",
-              caption: "Definition",
+              title: "行事日历",
+              caption: "Calendar",
               icon: "today",
+              link: "/"
+            },
+            {
+              title: "代办事项",
+              caption: "TotoTask",
+              icon: "inbox",
+              link: "/agilebpm/bpm/my/todoTaskList"
+            },
+            {
+              title: "发起申请",
+              caption: "Definition",
+              icon: "style",
               link: "/agilebpm/bpm/definition/definitionList"
             },
             {
-              title: "TotoTask",
-              caption: "TotoTask",
-              icon: "today",
-              link: "/agilebpm/bpm/my/todoTaskList"
+              title: "申请历史",
+              caption: "applyTaskList",
+              icon: "outbox",
+              link: "/agilebpm/bpm/my/applyTaskList"
             }
           ]
         },
@@ -129,43 +141,43 @@ export default {
           title: "Other",
           essentialLinks: [
             {
+              title: "QRcode",
+              caption: "qrcode",
+              icon: "qr_code",
+              link: "/qrcode"
+            },
+            {
+              title: "Health",
+              icon: "favorite",
+              link: "/health"
+            },
+            {
               title: "News",
               caption: "News",
-              icon: "news",
+              icon: "image",
               link: "/news/list"
             },
             {
-              title: "Calendar",
-              caption: "Calendar",
-              icon: "today",
-              link: "/"
+              title: "Apps",
+              icon: "apps",
+              link: "/apps"
             },
             {
-              title: "Inbox",
-              caption: "Inbox",
-              icon: "inbox",
-              link: "/inbox"
+              title: "Examination",
+              icon: "spellcheck",
+              link: "/Exam"
             },
             {
-              title: "Outbox",
-              caption: "Outbox",
-              icon: "outbox",
-              separator: true,
-              link: "/history"
+              title: "ECM",
+              icon: "plagiarism",
+              link: "/ECM"
             },
             {
               title: "eGate",
               caption: "eGate",
-              icon: "help",
+              icon: "support_agent",
               separator: true,
               link: "/form/egate"
-            },
-            {
-              title: "qrcode",
-              caption: "qrcode",
-              icon: "help",
-              separator: true,
-              link: "/qrcode"
             }
           ]
         }

@@ -2,7 +2,7 @@
   <div style="background:#f0f0f0;">
     <img :src="flowImage" />
     <div class="scoped">
-    <form-create ref="f" v-model="xxx" :rule="rule" :option="option" style="margin:0 auto;"></form-create>
+    <form-create ref="f" v-model="xxx" :rule="rule" :option="option" style="padding:4px;margin:0 auto;"></form-create>
     </div>
     <h1 style="color:red;">Footer</h1>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -157,7 +157,7 @@ export default Vue.extend({
       var form = await this.API('bpm/comm/form/dev',{
                                                         uid : (this.$store.state.token || { userInfo: { user: {} }}).userInfo.user.account || 'vip05',
                                                         pwd : '',
-                                                     formId : this.$route.params.formId || 'egate',
+                                                     formId : this.$route.params.formId || '1.0.1.3-beta',
                                                      action : 'start' 
                               }).catch(error => {
         this.$Message.error("Sorry!,Try Again<br>" + error);
