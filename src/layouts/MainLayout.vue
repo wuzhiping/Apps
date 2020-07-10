@@ -159,6 +159,13 @@ export default {
               icon: "help",
               separator: true,
               link: "/form/egate"
+            },
+            {
+              title: "qrcode",
+              caption: "qrcode",
+              icon: "help",
+              separator: true,
+              link: "/qrcode"
             }
           ]
         }

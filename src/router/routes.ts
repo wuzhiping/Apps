@@ -27,7 +27,7 @@ const routes: RouteConfig[] = [
 
       {
         path: 'agilebpm/bpm/definition/start/:defId', name: 'start',
-        meta: { title: "start", back: true, color: "blue" }, props: true,
+        meta: { title: "start", color: "blue" }, props: true,
         component: () => import('pages/agilebpm/bpm/definition/start.vue')
       },
 
@@ -38,7 +38,7 @@ const routes: RouteConfig[] = [
 
       {
         path: 'form/:formId', name: 'form', props: true,
-        meta: { title:"Forms",color:"gray", back:true},
+        meta: { title:"Forms",color:"gray" },
         component: () => import('pages/form.vue')
       },
 
@@ -48,6 +48,13 @@ const routes: RouteConfig[] = [
           title: "News", color: "gray",
           keepAlive: true },
         component: () => import('pages/news/list.vue')
+      },
+      {
+        path: 'qrcode',
+        meta: {
+          title: "QR Code", color: "black"
+        },
+        component: () => import('pages/qrcode.vue')
       },
     ],
   },

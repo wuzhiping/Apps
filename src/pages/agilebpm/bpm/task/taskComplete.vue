@@ -57,7 +57,9 @@
         </q-timeline>-->
       </q-card-section>
     </q-card>
-    <form-create ref="f" v-model="form.xxx" :rule="form.rule" :option="form.option"></form-create>
+    <div class="scoped">
+       <form-create ref="f" v-model="form.xxx" :rule="form.rule" :option="form.option" style="margin:0 auto;"></form-create>
+    </div>
     <img :src="flowImage" />
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab color="purple" icon="keyboard_arrow_up" direction="up">
@@ -88,6 +90,7 @@ import {
 } from "../../../../service/agilebpm/bpm/instance";
 import { dev } from "../../../../service/BDD/API/bpm/comm/form";
 import { axiosInstance } from "boot/axios";
+import formCreate from '@form-create/iview';
 
 export default Vue.extend({
   name: "todoTaskList",
@@ -314,12 +317,12 @@ export default Vue.extend({
     },
     loadForm: async function() {
       var that = this;
-      dev({
+      dev('bpm/comm/form/dev',{
         uid:
           (this.$store.state.token || { userInfo: { user: {} } }).userInfo.user
             .account || "vip05",
         pwd: "",
-        formId: this.$route.params.formId,
+        formId: this.$route.params.formId || 'egate',
         action: "task"
       })
         .then(response => {
@@ -328,9 +331,9 @@ export default Vue.extend({
 
           if (form) {
             this.loading = false;
-            this.rule = formCreate.parseJson(JSON.stringify(form.data));
-            for (var n = 0; n < this.rule.length; n++) {
-              if (this.rule[n].field == "title") {
+            this.form.rule = formCreate.parseJson(JSON.stringify(form.data));
+            for (var n = 0; n < this.form.rule.length; n++) {
+              if (this.form.rule[n].field == "title") {
                 break;
               }
             }
@@ -351,11 +354,47 @@ export default Vue.extend({
   },
   mounted() {
     this.getTask();
+    this.loadForm();
   }
 });
 </script>
 
-<style lang="sass">
+<style lang="stylus" scoped>
+.scoped >>> h4
+  font-size 100%
+
+.scoped >>> .ivu-form, .scoped >>> .ivu-row
+  max-width 800px
+.scoped >>> .ivu-form
+  .ivu-form-item-label
+    font-weight bold
+    opacity 0.9
+    font-size 14px
+    vertical-align middle
+    display inline-block
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+
+.scoped >>> .ivu-form-item-error-tip
+  padding-top 0
+  font-size 8px
+.scoped >>> .ivu-input-wrapper-large
+  .ivu-input-icon
+    line-height 32px
+  .ivu-input-prefix
+    i
+      line-height 32px
+  .ivu-input-suffix
+    i
+      line-height 32px
+.scoped >>> .ivu-form-item
+  margin-bottom 14px
+
+.scoped >>> .search-loading
+    margin-top 30%
+    display flex
+    justify-content center
 
 </style>
 
