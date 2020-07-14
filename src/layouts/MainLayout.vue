@@ -50,7 +50,14 @@
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
               </q-item-section>
-              <q-item-section>{{ menuItem.title }}</q-item-section>
+              <q-item-section>
+                <div class="text">
+                  {{ menuItem.title }}
+                  <q-badge color="red" align="top"
+                            v-if="menuItem.count > 0">{{menuItem.count}}
+                  </q-badge>
+                </div>
+              </q-item-section>
             </q-item>
 
             <q-separator v-if="menuItem.separator" />
@@ -74,14 +81,26 @@
     </q-drawer>
 
     <q-page-container>
-      <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-        <keep-alive>
-          <router-view v-if="$route.meta.keepAlive"></router-view>
-        </keep-alive>
-      </transition>
-      <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-        <router-view v-if="!$route.meta.keepAlive"></router-view>
-      </transition>
+      <!-- <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut"> -->
+      <keep-alive>
+        <!-- <transition
+          v-if="$route.meta.keepAlive"
+          appear
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >-->
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+        <!-- </transition> -->
+      </keep-alive>
+      <!-- </transition> -->
+      <!-- <transition
+        v-if="!$route.meta.keepAlive"
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+      >-->
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+      <!-- </transition> -->
     </q-page-container>
   </q-layout>
 </template>
@@ -89,6 +108,10 @@
 <script>
 import EssentialLink from "components/EssentialLink.vue";
 import languages from "quasar/lang/index.json";
+import axios from "axios";
+import { axiosInstance } from "boot/axios";
+
+axios.defaults.baseURL = axiosInstance.defaults.baseURL;
 
 export default {
   name: "MainLayout",
@@ -107,6 +130,7 @@ export default {
     return {
       user: {},
       leftDrawerOpen: false,
+      todoCount: 0,
       essentialLinks: [
         {
           title: "Office",
@@ -118,21 +142,34 @@ export default {
               link: "/"
             },
             {
-              title: "代办事项",
+              title: "我的抄送",
+              caption: "TotoTask",
+              icon: "file_copy",
+              link: "/agilebpm/bpm/my/carboncopyReceiveList"
+            },
+            {
+              title: "待办事项",
               caption: "TotoTask",
               icon: "inbox",
-              link: "/agilebpm/bpm/my/todoTaskList"
+              link: "/agilebpm/bpm/my/todoTaskList",
+              count: 0
+            },
+            {
+              title: "办理历史",
+              caption: "approveList",
+              icon: "outbox",
+              link: "/agilebpm/bpm/my/approveList"
             },
             {
               title: "发起申请",
               caption: "Definition",
-              icon: "style",
+              icon: "send",
               link: "/agilebpm/bpm/definition/definitionList"
             },
             {
               title: "申请历史",
               caption: "applyTaskList",
-              icon: "outbox",
+              icon: "history",
               link: "/agilebpm/bpm/my/applyTaskList"
             }
           ]
@@ -141,11 +178,29 @@ export default {
           title: "Other",
           essentialLinks: [
             {
+              title: "Apps",
+              icon: "apps",
+              link: "/apps"
+            },
+            {
+              title: "eGate",
+              caption: "eGate",
+              icon: "support_agent",
+              separator: true,
+              link: "/form/egate"
+            },
+            {
               title: "QRcode",
               caption: "qrcode",
               icon: "qr_code",
               link: "/qrcode"
             },
+            {
+              title: "Settings",
+              icon: "settings",
+              link: "/settings"
+            },
+            /*
             {
               title: "Health",
               icon: "favorite",
@@ -157,11 +212,7 @@ export default {
               icon: "image",
               link: "/news/list"
             },
-            {
-              title: "Apps",
-              icon: "apps",
-              link: "/apps"
-            },
+
             {
               title: "Examination",
               icon: "spellcheck",
@@ -170,15 +221,9 @@ export default {
             {
               title: "ECM",
               icon: "plagiarism",
-              link: "/ECM"
-            },
-            {
-              title: "eGate",
-              caption: "eGate",
-              icon: "support_agent",
-              separator: true,
-              link: "/form/egate"
+              link: "/ECM/grc"
             }
+            */
           ]
         }
       ]
@@ -195,12 +240,46 @@ export default {
         this.$i18n.locale = this.$q.lang.isoName;
         console.dir(this.$q.lang.isoName);
       });
+    },
+    todoTaskList() {
+      let formData = new FormData();
+      formData.append("offset", 0);
+      formData.append("limit", 1);
+      formData.append("sort", "");
+      formData.append("order", "");
+      formData.append("filter$VEQ", "");
+      axios
+        .post("/bpm/my/todoTaskList", formData)
+        .then(response => {
+          for (
+            var i = 0;
+            i < this.essentialLinks[0].essentialLinks.length;
+            i++
+          ) {
+            if (
+              this.essentialLinks[0].essentialLinks[i].link ==
+              "/agilebpm/bpm/my/todoTaskList"
+            ) {
+              this.essentialLinks[0].essentialLinks[i].count =
+                response.data.total;
+            }
+          }
+          //this.todoCount = response.data.total;
+          //state.dispatch('userInfoBpm', data)
+        })
+        .catch(error => {});
     }
   },
   created() {
     //console.dir( languages );
     //console.dir( this.$q.lang.getLocale() );
     this.lang("zh-hant");
+    this.$root.$on("refresh_todo_list", () => {
+      this.todoTaskList();
+    });
+  },
+  mounted() {
+    this.$root.$emit("refresh_todo_list");
   }
 };
 </script>

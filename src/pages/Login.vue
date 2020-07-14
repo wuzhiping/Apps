@@ -26,7 +26,7 @@
             unchecked-icon="clear"/>
           <br/>
           <q-btn flat color="warning" @click="logout" label="CLEAR ALL" />
-          <q-btn flat rounded color="primary" label="CANCLE" />
+          <q-btn flat rounded color="primary" @click="$router.push('/apps')" label="CANCLE" />
           <q-btn flat round color="red" @click="login" icon="camera_rear" />
           <!--q-img
            :src="url"
@@ -79,7 +79,7 @@ export default Vue.extend({
                           var res = result.data;
                           if(res.isOk){
                              this.$store.commit("token/login", res.data);
-                             this.$router.push('/');
+                             this.$router.push('/apps');
                           } else {
                              Notify.create( { caption:res.code, message: res.msg, html:true})
                           }     

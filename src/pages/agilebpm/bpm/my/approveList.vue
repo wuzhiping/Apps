@@ -3,7 +3,7 @@
     <q-pagination v-model="pagination.current" :max="pagination.max" style="display:block;width:100%;"></q-pagination>
     <q-list bordered separator>
       <q-item clickable v-ripple v-for="(item, index) in tasks" :key="index" class="caption">
-        <q-item-section @click="openInstance(item)">
+        <q-item-section>
           <H1 style="color:red;">{{item.subject}}</H1>
           <div v-for="(v, o) in item">{{o}}: {{v}}</div>
 
@@ -15,15 +15,15 @@
 
 <script lang="javascript">
 import Vue from "vue";
-import { applyTaskList } from "../../../../service/agilebpm/bpm/my";
+import { approveList } from "../../../../service/agilebpm/bpm/my";
 
 export default Vue.extend({
-  name: "applyTaskList",
+  name: "approveList",
   components: {},
   data() {
     return {
       query: {
-        limit: 3,
+        limit: 10,
         sort: "",
         order: "",
         filter: ""
@@ -47,7 +47,7 @@ export default Vue.extend({
         .catch(err => {});
     },
     getList: function() {
-      applyTaskList(
+      approveList(
         (this.pagination.current - 1) * this.query.limit,
         this.query.limit,
         this.query.sort,

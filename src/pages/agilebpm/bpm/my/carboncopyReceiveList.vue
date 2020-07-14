@@ -3,7 +3,7 @@
     <q-pagination v-model="pagination.current" :max="pagination.max" style="display:block;width:100%;"></q-pagination>
     <q-list bordered separator>
       <q-item clickable v-ripple v-for="(item, index) in tasks" :key="index" class="caption">
-        <q-item-section @click="openInstance(item)">
+        <q-item-section>
           <H1 style="color:red;">{{item.subject}}</H1>
           <div v-for="(v, o) in item">{{o}}: {{v}}</div>
 
@@ -15,18 +15,20 @@
 
 <script lang="javascript">
 import Vue from "vue";
-import { applyTaskList } from "../../../../service/agilebpm/bpm/my";
+import { receiveList } from "../../../../service/agilebpm/bpm/carbonCopy";
 
 export default Vue.extend({
-  name: "applyTaskList",
+  name: "carboncopyReceiveList",
   components: {},
   data() {
     return {
       query: {
-        limit: 3,
-        sort: "",
+        limit: 10,
+        subject: "",
         order: "",
-        filter: ""
+        filter: "",
+        node_name:"",
+        read:""
       },
       pagination: {
         max: 0,
@@ -47,12 +49,13 @@ export default Vue.extend({
         .catch(err => {});
     },
     getList: function() {
-      applyTaskList(
+      receiveList(
+          this.query.order,
         (this.pagination.current - 1) * this.query.limit,
         this.query.limit,
-        this.query.sort,
-        this.query.order,
-        this.query.filter
+        this.query.subject,
+        this.query.node_name,
+        this.query.read
       )
         .then(response => {
           // console.dir(response);

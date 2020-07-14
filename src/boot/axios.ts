@@ -15,6 +15,8 @@ export default boot(({ app, Vue, router }) => {
   console.dir( process.env.DEV )
   if(process.env.DEV)
      axiosInstance.defaults.baseURL = "http://ateam.feg.cn:85"
+  else
+     axiosInstance.defaults.baseURL = "https://a.feg.com.tw"
 
   axiosInstance.defaults.withCredentials=true;
   axiosInstance.defaults.headers.common["TZ"] = -(new Date()).getTimezoneOffset()/60;

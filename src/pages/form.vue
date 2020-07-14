@@ -99,7 +99,7 @@ export default Vue.extend({
   mounted: async function () {
         var that = this;
 
-        this.$store.commit("token/where", { title:"loading "+this.$route.params.formId, color:"gray" });
+        this.$store.commit("token/where", { title:"loading "+this.$route.params.formId, back: this.$route.params.formId == "egate", color:"gray" });
 
         var form = await this.API('bpm/comm/form/demo',{
                                                         uid : (this.$store.state.token || { userInfo: { user: {} }}).userInfo.user.account || 'vip05',
@@ -112,12 +112,23 @@ export default Vue.extend({
 
         this.$q.loading.hide()
 
+
+var colors = ["#a8b5d7",
+ "#d6c34a","#6f6b62","#837769","#c9b8a8","#bf362e",
+ "#d7b7ce","#e4c0a8","#efe1e1","#479fad","#cbddd1",
+ "#c57246","#ab5b2a","#c28f56","#d3b889","#d5cdc0",
+ "#d9d0c1","#1e4183","#3d749d","#498eb8","#9ab0bd",
+ "#b7c5ce"];
+
         if(form){
            this.loading = false;
            this.rule = formCreate.parseJson(JSON.stringify(form.data));
            for(var n=0;n<this.rule.length;n++){
               if(this.rule[n].field == "title"){
-                this.$store.commit("token/where", { title:this.rule[n].value, color:"green" });
+                this.$store.commit("token/where", { title:this.rule[n].value, 
+                                                    back: this.$route.params.formId == "egate",
+                                                    color:colors[Math.floor((Math.random()*20)+1)]
+                                                  });
                 break;
               }
            }

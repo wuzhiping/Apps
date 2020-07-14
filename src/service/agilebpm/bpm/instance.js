@@ -3,7 +3,7 @@ import { axiosInstance } from 'boot/axios'
 export function getOpinion(instId, taskId) {
     const p = new Promise(function (resolve, reject) {
         return axiosInstance
-            .post("/bpm/instance/getOpinion?instId=" + instId + "&taskId=" + taskId)
+            .post("/bpm/instance/getOpinion?instId=" + (instId || "") + "&taskId=" + (taskId || ""))
             .then(response => {
                 //console.dir(response)
                 //state.dispatch('userInfoBpm', data)
@@ -91,10 +91,10 @@ export function getInstanceData(instanceId, readonly, defId, flowKey, formType) 
     const p = new Promise(function (resolve, reject) {
         let formData = new FormData();
         formData.append("instanceId", instanceId || "");
-        formData.append("readonly", readonly || "");
+        formData.append("readonly", readonly || "false");
         formData.append("defId", defId || "");
         formData.append("flowKey", flowKey || "");
-        formData.append("formType", formType || "");
+        formData.append("formType", formType || "pc");
         return axiosInstance
             .post("/bpm/instance/getInstanceData", formData)
             .then(response => {

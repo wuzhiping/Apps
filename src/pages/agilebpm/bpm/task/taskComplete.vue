@@ -277,11 +277,13 @@ export default Vue.extend({
         });
     },
     doA(action) {
+      var form = this.$refs["f"].$f;
       doAction({
         taskId: this.task.taskId,
         nodeId: this.task.nodeId,
         instanceId: this.task.instId,
         data: {
+          form: form.formData() || {},
           bizId: "bizId" //this.vars["__BizKey__"],
           //variables: this.vars
         },
@@ -293,6 +295,7 @@ export default Vue.extend({
       })
         .then(response => {
           if (response.data.code == 200) {
+            this.$root.$emit("refresh_todo_list");
             this.$q.notify({
               progress: true,
               message: action.alias + " ok " + response.data.msg,

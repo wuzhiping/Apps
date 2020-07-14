@@ -2,11 +2,23 @@
   <div style="background:#f0f0f0;">
     <img :src="flowImage" />
     <div class="scoped">
-    <form-create ref="f" v-model="xxx" :rule="rule" :option="option" style="padding:4px;margin:0 auto;"></form-create>
+      <form-create
+        ref="f"
+        v-model="xxx"
+        :rule="rule"
+        :option="option"
+        style="padding:4px;margin:0 auto;"
+      ></form-create>
     </div>
     <h1 style="color:red;">Footer</h1>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-fab color="purple" icon="keyboard_arrow_up" direction="up">
+      <q-fab
+        color="purple"
+        icon="keyboard_arrow_up"
+        direction="up"
+        @before-show="actionBeforeShow($event)"
+        v-model="showAction"
+      >
         <q-fab-action
           color="primary"
           :label="bl.name"
@@ -39,6 +51,7 @@ export default Vue.extend({
       datas: {},
       flowImage: null,
       loading: true,
+      showAction: false,
 
       xxx: {},
       rule: [],
@@ -68,8 +81,8 @@ export default Vue.extend({
     };
   },
   methods: {
-    API(url,payload) {
-      return this.$axios.post('https://a.feg.com.tw/BDD/API/'+url, payload);
+    API(url, payload) {
+      return this.$axios.post("https://a.feg.com.tw/BDD/API/" + url, payload);
     },
     getInstance() {
       getInstanceData(null, null, this.defId, null, null)
@@ -99,22 +112,20 @@ export default Vue.extend({
         });
     },
     doA(action) {
-
       var form = this.$refs["f"].$f;
       console.dir(form);
       form.disabled(false);
       // form.resetFields();
-      form.validate((valid)=>{
-          if(valid)
-             console.dir(form.formData());
-          else 
-             return;
+      form.validate(valid => {
+        if (valid) console.dir(form.formData());
+        else return;
       });
-      
+
       doAction({
         defId: this.defId,
         instanceId: "",
         data: {
+          form: form.formData() || {},
           bizId: "biz",
           variables: {},
           log: {},
@@ -154,12 +165,14 @@ export default Vue.extend({
     },
     loadForm: async function() {
       var that = this;
-      var form = await this.API('bpm/comm/form/dev',{
-                                                        uid : (this.$store.state.token || { userInfo: { user: {} }}).userInfo.user.account || 'vip05',
-                                                        pwd : '',
-                                                     formId : this.$route.params.formId || '1.0.1.3-beta',
-                                                     action : 'start' 
-                              }).catch(error => {
+      var form = await this.API("bpm/comm/form/dev", {
+        uid:
+          (this.$store.state.token || { userInfo: { user: {} } }).userInfo.user
+            .account || "vip05",
+        pwd: "",
+        formId: this.$route.params.formId || "1.0.1.3-beta",
+        action: "start"
+      }).catch(error => {
         this.$Message.error("Sorry!,Try Again<br>" + error);
       });
 
@@ -182,6 +195,20 @@ export default Vue.extend({
           '<em>I can</em> <span style="color: red">use</span> <strong>HTML</strong>',
         html: true
       });
+    },
+    actionBeforeShow(e) {
+      console.log("actionBeforeShow");
+      var form = this.$refs["f"].$f;
+      form.validate(valid => {
+        if (valid) console.dir(form.formData());
+        else {
+          this.showAction = false;
+          this.$q.notify({
+            message: "Form no valid"
+          });
+        }
+      });
+      // this.showAction = false;
     }
   },
   mounted() {
@@ -194,41 +221,58 @@ export default Vue.extend({
 
 
 <style lang="stylus" scoped>
-.scoped >>> h4
-  font-size 100%
+.scoped >>> h4 {
+  font-size: 100%;
+}
 
-.scoped >>> .ivu-form, .scoped >>> .ivu-row
-  max-width 800px
-.scoped >>> .ivu-form
-  .ivu-form-item-label
-    font-weight bold
-    opacity 0.9
-    font-size 14px
-    vertical-align middle
-    display inline-block
-    overflow hidden
-    text-overflow ellipsis
-    white-space nowrap
+.scoped >>> .ivu-form, .scoped >>> .ivu-row {
+  max-width: 800px;
+}
 
-.scoped >>> .ivu-form-item-error-tip
-  padding-top 0
-  font-size 8px
-.scoped >>> .ivu-input-wrapper-large
-  .ivu-input-icon
-    line-height 32px
-  .ivu-input-prefix
-    i
-      line-height 32px
-  .ivu-input-suffix
-    i
-      line-height 32px
-.scoped >>> .ivu-form-item
-  margin-bottom 14px
+.scoped >>> .ivu-form {
+  .ivu-form-item-label {
+    font-weight: bold;
+    opacity: 0.9;
+    font-size: 14px;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
 
-.scoped >>> .search-loading
-    margin-top 30%
-    display flex
-    justify-content center
+.scoped >>> .ivu-form-item-error-tip {
+  padding-top: 0;
+  font-size: 8px;
+}
 
+.scoped >>> .ivu-input-wrapper-large {
+  .ivu-input-icon {
+    line-height: 32px;
+  }
+
+  .ivu-input-prefix {
+    i {
+      line-height: 32px;
+    }
+  }
+
+  .ivu-input-suffix {
+    i {
+      line-height: 32px;
+    }
+  }
+}
+
+.scoped >>> .ivu-form-item {
+  margin-bottom: 14px;
+}
+
+.scoped >>> .search-loading {
+  margin-top: 30%;
+  display: flex;
+  justify-content: center;
+}
 </style>
 

@@ -19,7 +19,7 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   registered (/* registration */) {
     // console.log('Service worker has been registered.')
-    Notify.create( { caption:"registered", message:'Service worker has been registered.'})
+    // Notify.create( { caption:"registered", message:'Service worker has been registered.'})
   },
 
   cached (/* registration */) {
@@ -34,7 +34,7 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   updated (/* registration */) {
     // console.log('New content is available; please refresh.')
-    Notify.create( { caption:"updated", message:'New content is available; please refresh.'})
+    Notify.create( { caption:"updated", message:'New content is available; Waiting...'})
     setTimeout(function() { window.location.reload(); },3000);
   },
 
