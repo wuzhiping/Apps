@@ -1,12 +1,13 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-header elevated :style="{ background:$store.state.token.color }">
-      <q-toolbar>
+      <q-toolbar style="margin:0;padding:0 0 0 4px;">
         <q-btn
           v-if="!$store.state.token.back"
           flat
           dense
           round
+          color="pink"
           icon="menu"
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
@@ -14,6 +15,7 @@
         <q-btn v-if="$store.state.token.back" flat round dense icon="more" @click="$router.go(-1)" />
         <q-toolbar-title>{{$store.state.token.title}}</q-toolbar-title>
         <div>{{ $q.lang.nativeName }}</div>
+        <q-btn flat round dense icon="more_vert" @click="$router.push('/apps');" />
         <span></span>
       </q-toolbar>
     </q-header>

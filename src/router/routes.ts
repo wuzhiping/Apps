@@ -65,6 +65,11 @@ const routes: RouteConfig[] = [
         meta: { title:"Forms" },
         component: () => import('pages/form.vue')
       },
+      {
+        path: 'ecm/:site', name: 'ecm', props: true,
+        meta: { title:"ECM" },
+        component: () => import('pages/ecm.vue')
+      },
 
       {
         path: 'news/list',

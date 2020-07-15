@@ -1,7 +1,7 @@
 <template>
   <q-page padding style="backgroundx:#f0f0f0;" class="page">
     <div class="row justify-center">
-      <div class="col-10">
+      <div class="col-10" style="margin:12px 0 0;">
         <q-input dense v-model="search" outlined type="search" @input="searchItem">
           <template v-slot:append>
             <q-icon name="search"></q-icon>
@@ -30,9 +30,9 @@
     </div>
     <hr /> -->
     <div>
-      <div class="row" style="margin-top:10px;">
+      <!--div class="row" style="margin-top:10px;">
         <div class="col-10 offset-1">全部/结果:</div>
-      </div>
+      </div-->
       <div class="row">
         <div class="col-4" v-for="(obj,index) in filterObj" :key="index" style="margin:20px 0;" @click="goto(obj)">
           <q-avatar
@@ -70,42 +70,42 @@ export default Vue.extend({
          {
           icon: "today",
           link: "/",
-          color: "red",
+          color: "white",
           keywords: ["calendar"],
-          textcolor: "white",
+          textcolor: "orange",
           name: "Calendar"
         },
         {
           icon: "favorite",
-          link: "/health",
-          color: "red",
+          link: "/form/2BDL5JCG73D",
+          color: "gray",
           keywords: ["Health"],
-          textcolor: "white",
+          textcolor: "red",
           name: "Health"
         },
         {
-          icon: "image",
+          icon: "article",
           link: "/news/list",
-          color: "red",
+          color: "white",
           keywords: ["News"],
-          textcolor: "white",
+          textcolor: "red",
           name: "News"
         },
 
         {
           icon: "spellcheck",
           link: "/Exam",
-          color: "red",
+          color: "white",
           keywords: ["Examination"],
-          textcolor: "white",
+          textcolor: "red",
           name: "Examination"
         },
         {
           icon: "plagiarism",
-          link: "/ECM/grc",
-          color: "red",
+          link: "/ecm/grc",
+          color: "white",
           keywords: ["ECM"],
-          textcolor: "white",
+          textcolor: "pink",
           name: "ECM"
         },
         {
@@ -117,31 +117,37 @@ export default Vue.extend({
           name: "egate"
         },
         {
+          icon: "multiple_stop",
+          link: "/mro/phx",
+          color: "white",
+          keywords: ["mro"],
+          textcolor: "red",
+          name: "MRO"
+        },
+        {
+          icon: "fact_check",
+          link: "/logs",
+          color: "white",
+          keywords: ["log"],
+          textcolor: "yellow",
+          name: "Records"
+        },
+        {
           icon: "qr_code",
           link: "/qrcode",
-          color: "red",
+          color: "white",
           keywords: ["qr"],
-          textcolor: "white",
+          textcolor: "black",
           name: "QR Code"
         },
         {
-          icon: "event_available",
-          link: "/logs",
-          color: "red",
-          keywords: ["log"],
-          textcolor: "white",
-          name: "Logs"
-        },
-        {
-          icon: "transform",
+          icon: "bookmark",
           link: "/etag",
-          color: "red",
-          keywords: ["gat"],
-          textcolor: "white",
+          color: "white",
+          keywords: ["tag"],
+          textcolor: "red",
           name: "eTag"
         },
-
-
         // ,
         // {
         //   icon: "3d_rotation",
