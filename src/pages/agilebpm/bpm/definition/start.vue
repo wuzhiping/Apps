@@ -4,12 +4,14 @@
     <div class="scoped">
       <form-create
         ref="f"
-        v-model="xxx"
-        :rule="rule"
-        :option="option"
-        style="padding:4px;margin:0 auto;"
+        v-model="form.xxx"
+        :rule="form.rule"
+        :option="form.option"
+        style="margin:0 auto;"
       ></form-create>
     </div>
+    <div v-for="(v, o) in definition">{{o}}: {{v}}</div>
+    <pre>{{JSON.stringify(dispatche,null,1)}}</pre>
     <h1 style="color:red;">Footer</h1>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab
@@ -39,6 +41,9 @@ import {
   getInstanceData,
   doAction
 } from "../../../../service/agilebpm/bpm/instance";
+import { definitionList } from "../../../../service/agilebpm/bpm/my";
+import { dev } from "../../../../service/BDD/API/bpm/comm/form";
+import { dispatcher } from "../../../../service/BDD/API/bpm/comm/dispatcher";
 
 import { axiosInstance } from "boot/axios";
 
@@ -52,38 +57,38 @@ export default Vue.extend({
       flowImage: null,
       loading: true,
       showAction: false,
-
-      xxx: {},
-      rule: [],
-      option: {
-        form: {
-          labelPosition: "top",
-          labelWidth: undefined,
-          size: "large",
-          showMessage: true
-        },
-        row: {
-          gutter: 10
-        },
-        onSubmit: function(formData) {
-          vm.onSubmit(formData);
-        },
-        submitBtn: {
-          show: false,
-          type: "info",
-          long: true,
-          innerText: "save",
-          loading: false,
-          col: { span: 8 }
-        },
-        resetBtn: false
+      definition: null,
+      dispatche:{},
+            form: {
+        xxx: {},
+        rule: [],
+        option: {
+          form: {
+            labelPosition: "top",
+            labelWidth: undefined,
+            size: "large",
+            showMessage: true
+          },
+          row: {
+            gutter: 10
+          },
+          onSubmit: function(formData) {
+            vm.onSubmit(formData);
+          },
+          submitBtn: {
+            show: false,
+            type: "info",
+            long: true,
+            innerText: "save",
+            loading: false,
+            col: { span: 8 }
+          },
+          resetBtn: false
+        }
       }
     };
   },
   methods: {
-    API(url, payload) {
-      return this.$axios.post("https://a.feg.com.tw/BDD/API/" + url, payload);
-    },
     getInstance() {
       getInstanceData(null, null, this.defId, null, null)
         .then(response => {
@@ -105,6 +110,26 @@ export default Vue.extend({
       flowImage(null, this.defId, null)
         .then(response => {
           this.flowImage = response;
+          // this.$router.go(-1);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
+    getInfo() {
+      definitionList(0, 1, null, null, { id_$VEQ: this.defId })
+        .then(response => {
+          // console.dir(response);
+          if (response.data.isOk) {
+            this.definition = response.data.rows[0];
+            this.dep();
+          } else {
+            this.$q.notify({
+              caption: response.data.code,
+              message: response.data.msg,
+              html: true
+            });
+          }
           // this.$router.go(-1);
         })
         .catch(error => {
@@ -163,38 +188,51 @@ export default Vue.extend({
           console.dir(error);
         });
     },
+    dep: function() {
+      dispatcher("Definition", this.definition)
+        .then(response => {
+          this.dispatche = response.data;
+          console.dir(response);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
     loadForm: async function() {
       var that = this;
-      var form = await this.API("bpm/comm/form/dev", {
+      dev("bpm/comm/form/dev", {
         uid:
           (this.$store.state.token || { userInfo: { user: {} } }).userInfo.user
             .account || "vip05",
         pwd: "",
-        formId: this.$route.params.formId || "1.0.1.3-beta",
+        formId: this.$route.params.formId || "egate",
         action: "start"
-      }).catch(error => {
-        this.$Message.error("Sorry!,Try Again<br>" + error);
-      });
+      })
+        .then(response => {
+          var form = response;
+          this.$q.loading.hide();
 
-      this.$q.loading.hide();
-
-      if (form) {
-        this.loading = false;
-        this.rule = formCreate.parseJson(JSON.stringify(form.data));
-        for (var n = 0; n < this.rule.length; n++) {
-          if (this.rule[n].field == "title") {
-            break;
+          if (form) {
+            this.loading = false;
+            this.form.rule = formCreate.parseJson(JSON.stringify(form.data));
+            for (var n = 0; n < this.form.rule.length; n++) {
+              if (this.form.rule[n].field == "title") {
+                break;
+              }
+            }
+          } else {
+            this.$router.go(-1);
+            return;
           }
-        }
-      } else {
-        this.$router.go(-1);
-        return;
-      }
-      this.$q.notify({
-        message:
-          '<em>I can</em> <span style="color: red">use</span> <strong>HTML</strong>',
-        html: true
-      });
+          this.$q.notify({
+            message:
+              '<em>I can</em> <span style="color: red">use</span> <strong>HTML</strong>',
+            html: true
+          });
+        })
+        .catch(error => {
+          this.$Message.error("Sorry!,Try Again<br>" + error);
+        });
     },
     actionBeforeShow(e) {
       console.log("actionBeforeShow");
@@ -215,6 +253,8 @@ export default Vue.extend({
     this.getInstance();
     this.getFlowImage();
     this.loadForm();
+    this.getInfo();
+    
   }
 });
 </script>

@@ -30,7 +30,7 @@
         </div>
       </q-card-section>
     </q-card>
-
+<pre>{{JSON.stringify(dispatche,null,1)}}</pre>
     <q-card class="my-card" style="margin-top: 10px;">
       <q-card-section>
         <q-timeline color="secondary">
@@ -58,7 +58,13 @@
       </q-card-section>
     </q-card>
     <div class="scoped">
-       <form-create ref="f" v-model="form.xxx" :rule="form.rule" :option="form.option" style="margin:0 auto;"></form-create>
+      <form-create
+        ref="f"
+        v-model="form.xxx"
+        :rule="form.rule"
+        :option="form.option"
+        style="margin:0 auto;"
+      ></form-create>
     </div>
     <img :src="flowImage" />
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -90,7 +96,8 @@ import {
 } from "../../../../service/agilebpm/bpm/instance";
 import { dev } from "../../../../service/BDD/API/bpm/comm/form";
 import { axiosInstance } from "boot/axios";
-import formCreate from '@form-create/iview';
+import formCreate from "@form-create/iview";
+import { dispatcher } from "../../../../service/BDD/API/bpm/comm/dispatcher";
 
 export default Vue.extend({
   name: "todoTaskList",
@@ -102,6 +109,7 @@ export default Vue.extend({
       opinion: [],
       vars: {},
       datas: {},
+      dispatche:{},
       flowImage: null,
       flowImageInfo: null,
       form: {
@@ -151,12 +159,23 @@ export default Vue.extend({
     }
   },
   methods: {
+    dep: function() {
+      dispatcher("Task", this.task)
+        .then(response => {
+          this.dispatche = response.data;
+          console.dir(response);
+        })
+        .catch(error => {
+          console.dir(error);
+        });
+    },
     getTask() {
       getBpmTask(this.id)
         .then(response => {
           // console.dir(response);
           if (response.data.isOk) {
             this.task = response.data.data;
+            this.dep();
             this.getOp();
             //this.getVar();
             this.getData();
@@ -320,12 +339,12 @@ export default Vue.extend({
     },
     loadForm: async function() {
       var that = this;
-      dev('bpm/comm/form/dev',{
+      dev("bpm/comm/form/dev", {
         uid:
           (this.$store.state.token || { userInfo: { user: {} } }).userInfo.user
             .account || "vip05",
         pwd: "",
-        formId: this.$route.params.formId || 'egate',
+        formId: this.$route.params.formId || "egate",
         action: "task"
       })
         .then(response => {
@@ -363,41 +382,58 @@ export default Vue.extend({
 </script>
 
 <style lang="stylus" scoped>
-.scoped >>> h4
-  font-size 100%
+.scoped >>> h4 {
+  font-size: 100%;
+}
 
-.scoped >>> .ivu-form, .scoped >>> .ivu-row
-  max-width 800px
-.scoped >>> .ivu-form
-  .ivu-form-item-label
-    font-weight bold
-    opacity 0.9
-    font-size 14px
-    vertical-align middle
-    display inline-block
-    overflow hidden
-    text-overflow ellipsis
-    white-space nowrap
+.scoped >>> .ivu-form, .scoped >>> .ivu-row {
+  max-width: 800px;
+}
 
-.scoped >>> .ivu-form-item-error-tip
-  padding-top 0
-  font-size 8px
-.scoped >>> .ivu-input-wrapper-large
-  .ivu-input-icon
-    line-height 32px
-  .ivu-input-prefix
-    i
-      line-height 32px
-  .ivu-input-suffix
-    i
-      line-height 32px
-.scoped >>> .ivu-form-item
-  margin-bottom 14px
+.scoped >>> .ivu-form {
+  .ivu-form-item-label {
+    font-weight: bold;
+    opacity: 0.9;
+    font-size: 14px;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
 
-.scoped >>> .search-loading
-    margin-top 30%
-    display flex
-    justify-content center
+.scoped >>> .ivu-form-item-error-tip {
+  padding-top: 0;
+  font-size: 8px;
+}
 
+.scoped >>> .ivu-input-wrapper-large {
+  .ivu-input-icon {
+    line-height: 32px;
+  }
+
+  .ivu-input-prefix {
+    i {
+      line-height: 32px;
+    }
+  }
+
+  .ivu-input-suffix {
+    i {
+      line-height: 32px;
+    }
+  }
+}
+
+.scoped >>> .ivu-form-item {
+  margin-bottom: 14px;
+}
+
+.scoped >>> .search-loading {
+  margin-top: 30%;
+  display: flex;
+  justify-content: center;
+}
 </style>
 

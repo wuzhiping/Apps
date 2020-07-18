@@ -7,7 +7,15 @@ const routes: RouteConfig[] = [
     children: [
       { path: '',
          meta: { open:false, title:"Risk Management" },
-        component: () => import('pages/Index.vue') },
+        component: () => import('pages/Index.vue') 
+      },
+      {
+        path: 'apps',
+        meta: {
+          open: true,title: "Apps"
+        },
+        component: () => import('pages/apps.vue')
+      },
 
       { path: 'login', 
         meta: { open:true, title:"Authoration", back:true, color:"#f44336" },
@@ -34,11 +42,25 @@ const routes: RouteConfig[] = [
         component: () => import('pages/agilebpm/bpm/my/approveList.vue')
       },
       {
+        path: 'agilebpm/bpm/my/approveDetail/:id', name: 'approveDetail',
+        meta: {
+          title: "approve"
+        }, props: true,
+        component: () => import('pages/agilebpm/bpm/my/approveDetail.vue')
+      },
+      {
         path: 'agilebpm/bpm/my/carboncopyReceiveList', name: 'carboncopyReceiveList',
         meta: {
           title: "carboncopyReceiveList"
         },
         component: () => import('pages/agilebpm/bpm/my/carboncopyReceiveList.vue')
+      },
+      {
+        path: 'agilebpm/bpm/my/carboncopyReceiveDetail/:id', name: 'carboncopyReceiveDetail',
+        meta: {
+          title: "carboncopy"
+        }, props: true,
+        component: () => import('pages/agilebpm/bpm/my/carboncopyReceiveDetail.vue')
       },
       {
         path: 'agilebpm/bpm/definition/definitionList', name: 'definitionList',
@@ -70,7 +92,21 @@ const routes: RouteConfig[] = [
         meta: { title:"ECM" },
         component: () => import('pages/ecm.vue')
       },
-
+      {
+        path: 'mro/:site', name: 'mro', props: true,
+        meta: { title:"MRO", open:true },
+        component: () => import('pages/mro.vue')
+      },
+      {
+        path: 'logs', name: 'logs', props: true,
+        meta: { title:"HR" },
+        component: () => import('pages/logs.vue')
+      },
+      {
+        path: 'etag', name: 'etag', props: true,
+        meta: { title:"etag" },
+        component: () => import('pages/eTag.vue')
+      },
       {
         path: 'news/list',
         meta: {
@@ -84,13 +120,7 @@ const routes: RouteConfig[] = [
           open: true,title: "QR Code", color: "black"
         },
         component: () => import('pages/qrcode.vue')
-      }, {
-        path: 'apps',
-        meta: {
-          open: true,title: "Apps"
-        },
-        component: () => import('pages/apps.vue')
-      },
+      }, 
     ],
   },
   // Always leave this as last one,

@@ -6,6 +6,7 @@ import VueQrcodeReader from 'vue-qrcode-reader'
 import formCreate from '@form-create/iview'
 
 import PouchDB from 'pouchdb';
+import PouchdbFind from 'pouchdb-find'
 import io from 'socket.io-client/dist/socket.io.min'
 
 Vue.use(formCreate)

@@ -3,7 +3,7 @@
     <q-pagination v-model="pagination.current" :max="pagination.max" style="display:block;width:100%;"></q-pagination>
     <q-list bordered separator>
       <q-item clickable v-ripple v-for="(item, index) in tasks" :key="index" class="caption">
-        <q-item-section>
+        <q-item-section @click="open(item)">
           <H1 style="color:red;">{{item.subject}}</H1>
           <div v-for="(v, o) in item">{{o}}: {{v}}</div>
 
@@ -41,9 +41,9 @@ export default Vue.extend({
     }
   },
   methods: {
-    openInstance(insitance) {
+    open(item) {
       this.$router
-        .push({ name: "instanceDetail", params: { id: insitance.id } })
+        .push({ name: "approveDetail", params: { id: item.id } })
         .catch(err => {});
     },
     getList: function() {

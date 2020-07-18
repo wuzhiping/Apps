@@ -18,7 +18,7 @@
         <q-separator spaced />
       </q-card-section>
     </q-card>
-    <div v-for="(v,n) in instance">{{n}}: {{v}}</div>
+    <div v-for="(v,n) in approve">{{n}}: {{v}}</div>
     <pre>{{JSON.stringify(dispatche,null,1)}}</pre>
     <form-create
       ref="f"
@@ -66,17 +66,16 @@ import {
 } from "../../../../service/agilebpm/bpm/instance";
 import { dev } from "../../../../service/BDD/API/bpm/comm/form";
 import { dispatcher } from "../../../../service/BDD/API/bpm/comm/dispatcher";
-import { applyTaskList } from "../../../../service/agilebpm/bpm/my";
-import { axiosInstance } from "boot/axios";
+import { approveList } from "../../../../service/agilebpm/bpm/my";
 import formCreate from "@form-create/iview";
 
 export default Vue.extend({
-  name: "instanceDetail",
+  name: "approveDetail",
   props: ["id"],
   components: {},
   data() {
     return {
-      instance: {},
+      approve: {},
       opinion: [],
       dispatche:{},
       flowImage: null,
@@ -99,12 +98,13 @@ export default Vue.extend({
   },
   methods: {
     getInfo() {
-      applyTaskList(0, 1, null, null, { "id_$VEQ": this.id })
+      approveList(0, 1, null, null, { "inst.id_$VEQ": this.id })
         .then(response => {
           // console.dir(response);
           if (response.data.isOk) {
-            this.instance = response.data.rows[0];
+            this.approve = response.data.rows[0];
             this.dep();
+            // this.getFlowImage();
           } else {
             this.$q.notify({
               caption: response.data.code,
@@ -119,9 +119,9 @@ export default Vue.extend({
         });
     },
     dep: function() {
-      dispatcher("Apply", this.instance)
+      dispatcher("Approve", this.approve)
         .then(response => {
-          this.dispatche = response.data;
+            this.dispatche = response.data;
           console.dir(response);
         })
         .catch(error => {
@@ -204,7 +204,7 @@ export default Vue.extend({
         });
     },
     getFlowImage() {
-      flowImage(this.id)
+      flowImage(this.carboncopyReceive.instId)
         .then(response => {
           this.flowImage = response;
           // this.$router.go(-1);
@@ -215,9 +215,8 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.getInstance();
-    this.loadForm();
-    this.getFlowImage();
+    // this.getInstance();
+    // this.getFlowImage();
     this.getInfo();
   }
 });

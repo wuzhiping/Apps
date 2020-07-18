@@ -29,7 +29,11 @@ export function applyTaskList(offset, limit, sort, order, filter) {
         formData.append("limit", limit);
         formData.append("sort", sort);
         formData.append("order", order);
-        formData.append("filter$VEQ", filter);
+        if(filter){
+            for (var e in filter){
+                formData.append(e, filter[e]);
+            }
+        }
         return axiosInstance
             .post("/bpm/my/applyTaskList", formData)
             .then(response => {
@@ -51,7 +55,12 @@ export function definitionList(offset, limit, sort, order, filter) {
         formData.append("limit", limit);
         formData.append("sort", sort);
         formData.append("order", order);
-        formData.append("filter$VEQ", filter);
+        if(filter){
+            for (var e in filter){
+                formData.append(e, filter[e]);
+            }
+        }
+        // formData.append("filter$VEQ", filter);
         return axiosInstance
             .post("/bpm/my/definitionList", formData)
             .then(response => {
@@ -71,7 +80,11 @@ export function approveList(offset, limit, sort, order, filter) {
         formData.append("limit", limit);
         formData.append("sort", sort);
         formData.append("order", order);
-        formData.append("filter$VEQ", filter);
+        if (filter) {
+            for (var e in filter) {
+                formData.append(e, filter[e]);
+            }
+        }
         return axiosInstance
             .post("/bpm/my/approveList", formData)
             .then(response => {

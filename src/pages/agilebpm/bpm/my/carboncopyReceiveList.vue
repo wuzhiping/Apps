@@ -3,7 +3,7 @@
     <q-pagination v-model="pagination.current" :max="pagination.max" style="display:block;width:100%;"></q-pagination>
     <q-list bordered separator>
       <q-item clickable v-ripple v-for="(item, index) in tasks" :key="index" class="caption">
-        <q-item-section>
+        <q-item-section @click="open(item)">
           <H1 style="color:red;">{{item.subject}}</H1>
           <div v-for="(v, o) in item">{{o}}: {{v}}</div>
 
@@ -24,11 +24,9 @@ export default Vue.extend({
     return {
       query: {
         limit: 10,
-        subject: "",
         order: "",
         filter: "",
         node_name:"",
-        read:""
       },
       pagination: {
         max: 0,
@@ -43,9 +41,9 @@ export default Vue.extend({
     }
   },
   methods: {
-    openInstance(insitance) {
+    open(insitance) {
       this.$router
-        .push({ name: "instanceDetail", params: { id: insitance.id } })
+        .push({ name: "carboncopyReceiveDetail", params: { id: insitance.id } })
         .catch(err => {});
     },
     getList: function() {
@@ -53,9 +51,7 @@ export default Vue.extend({
           this.query.order,
         (this.pagination.current - 1) * this.query.limit,
         this.query.limit,
-        this.query.subject,
-        this.query.node_name,
-        this.query.read
+        this.query.node_name,this.query.filter
       )
         .then(response => {
           // console.dir(response);
