@@ -7,7 +7,7 @@ export function valid(account,password) {
         formData.append("account", account);
         formData.append("password", password);
         return axiosInstance
-            .post("/org/login/valid", formData)
+            .post("/org/login/valid", formData, {timeout:2000} )
             .then(response => {
                 //console.dir(response)
                 //state.dispatch('userInfoBpm', data)

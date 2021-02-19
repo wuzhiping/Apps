@@ -134,11 +134,19 @@ export default Vue.extend({
         },
         {
           icon: "qr_code",
-          link: "/qrcode",
+          link: "/qrcode/demo",
           color: "white",
           keywords: ["qr"],
           textcolor: "black",
           name: "QR Code"
+        },
+        {
+          icon: "help",
+          link: "/ticket",
+          color: "white",
+          keywords: ["help"],
+          textcolor: "black",
+          name: "Helpdesk"
         },
         {
           icon: "bookmark",

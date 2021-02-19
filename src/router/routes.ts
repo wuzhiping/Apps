@@ -88,6 +88,13 @@ const routes: RouteConfig[] = [
         component: () => import('pages/form.vue')
       },
       {
+        path: 'qrcode/:appId',
+        meta: {
+          open: true,title: "QR Code", color: "black"
+        },
+        component: () => import('pages/qrcode.vue')
+      },
+      {
         path: 'ecm/:site', name: 'ecm', props: true,
         meta: { title:"ECM" },
         component: () => import('pages/ecm.vue')
@@ -115,12 +122,12 @@ const routes: RouteConfig[] = [
         component: () => import('pages/news/list.vue')
       },
       {
-        path: 'qrcode',
+        path: 'ticket',
         meta: {
-          open: true,title: "QR Code", color: "black"
+          title: "Helpdesk"
         },
-        component: () => import('pages/qrcode.vue')
-      }, 
+        component: () => import('pages/ticket.vue')
+      },
     ],
   },
   // Always leave this as last one,
